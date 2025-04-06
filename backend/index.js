@@ -6,6 +6,9 @@ import mongoose from 'mongoose';// mongoose is a MongoDB object modeling tool de
 // Mongoose is an ODM (Object Data Modeling) library for MongoDB and Node.js. It provides a schema-based solution to model your application data. Mongoose supports both promises and callbacks.
  // it is used to connect database and create schema for the data.
 
+ import courseRoute from "./routes/course.route.js";
+
+
  
 // create server using express 
 const app = express()
@@ -17,13 +20,17 @@ const DB_URL=process.env.MONGO_URL;
 try{
  await mongoose.connect(DB_URL);
   console.log("Connected to MongoDB")
-
-}catch(err){
+}
+catch(err){
   console.log(err)
 }
-// app.get('/', (req, res) => {
-//   res.send('Anand Bind')
-// })
+
+// defining routes
+app.use("api/v1/course", courseRoute);// this is the route for course
+
+app.get('/', (req, res) => {
+  res.send('Anand Bind')
+})
 
 
 app.listen(port, () => {
