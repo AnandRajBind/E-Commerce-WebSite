@@ -9,4 +9,4 @@ const router = express.Router();// create express router
 // define route for creating a course
 router.post('/create', createCourse);
 
-export default router;
+export default router; 

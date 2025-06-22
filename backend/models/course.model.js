@@ -1,10 +1,9 @@
 // Here Write the database Schema.
 // Mongoose is an ODM (Object Data Modeling) library for MongoDB and Node.js. It provides a schema-based solution to model your application data. 
+// it is connect to mongodb and express.
 import mongoose from "mongoose";
 
 const courseSchema = new  mongoose.Schema({
-
-
     title:{
         type:String,
         required:true,
