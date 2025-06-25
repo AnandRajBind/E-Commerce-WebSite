@@ -25,11 +25,10 @@ const courseSchema = new mongoose.Schema({
             type: String,
             required: true,
         }
-    }
+    },
 }); 
+export const Course = mongoose.model("Course", courseSchema);// CourseSchema convert in model and export it as Course.and "Course" is the name of the collection in the database.
 
 
 // The model is a class that constructs documents. A document is an instance of a model.
 // The model is responsible for creating and reading documents from the underlying MongoDB database.
-
-export const Course = mongoose.model("Course", courseSchema);// CourseSchema convert in model and export it as Course.and "Course" is the name of the collection in the database.

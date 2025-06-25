@@ -4,26 +4,24 @@
 // const express = require('express')// in the package.json file   "type": "commonjs" allow this syntax .
 import express from 'express';//in the package.json file   "type": "module" allow this syntax .
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';// mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment.modgoose supports Node.js and MongoDB.  
+import mongoose from 'mongoose';// mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment.modgoose supports Node.js and MongoDB.
 // Mongoose is an ODM (Object Data Modeling) library for MongoDB and Node.js. It provides a schema-based solution to model your application data. Mongoose supports both promises and callbacks.
  // it is used to connect database and create schema for the data.
-import courseRoute from "./routes/course.route.js";
-import fileUpload from 'express-fileupload';
-import { v2 as cloudinary } from 'cloudinary';
+ import { v2 as cloudinary } from 'cloudinary';
+ import courseRoute from "./routes/course.route.js";
+ import fileUpload from 'express-fileupload';
  // create server using express 
 const app = express()
 dotenv.config();
-
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(
   fileUpload({
     useTempFiles: true,
-    temFileDir: "/tmp"
+    tempFileDir: "/tmp/"
   })
-)
-
+);
 const port = process.env.PORT || 3000
-app.use(express.json())
-
 const DB_URL=process.env.MONGO_URL;
 
 // Database connection code 
@@ -34,10 +32,8 @@ try{
 catch(err){
   console.log(err)
 }
-
 // defining routes
 app.use("/api/v1/course",courseRoute);// this is the route for course
-
 // Cloudinary configuration code 
  cloudinary.config({ 
         cloud_name: process.env.cloud_name, 
@@ -45,7 +41,6 @@ app.use("/api/v1/course",courseRoute);// this is the route for course
         api_secret: process.env.api_secret 
     });
 
-    
 app.listen(port, () => {
   console.log(`server is running  on port ${port}`)
 })
