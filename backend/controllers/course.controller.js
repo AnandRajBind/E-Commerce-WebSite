@@ -35,12 +35,11 @@ export const createCourse = async (req, res) => {
     const cloud_response = await cloudinary.uploader.upload(image.tempFilePath);
         console.log("Step 7: Cloudinary upload response", cloud_response);
 
-    if (!cloud_response || !cloud_response.error) {
+    if (!cloud_response || cloud_response.error) {
             console.log("Step 8: Cloudinary error");
 
       return res.status(400).json({ error: "Error uploading image to Cloudinary" });
     }
-
     const courseData = {
       title,
       description,
@@ -61,7 +60,6 @@ export const createCourse = async (req, res) => {
     });
   } catch (error) {
         console.log("Step 11: Server error", error);
-
     console.error(error);
     res.status(500).json({ error: "Error creating course" });
   }

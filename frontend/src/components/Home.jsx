@@ -3,8 +3,15 @@ import logo from '/logo.webp'
 import { Link } from 'react-router-dom'
 import { FaFacebook, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa"
 
-
 function Home() {
+    const fetchCourses = () => {
+        try {
+            axios.get('')
+        } catch (error) {
+            console.log("Error fetching courses:" + error);
+        }
+    }
+    
     return (
         <div className="bg-gradient-to-r from-black to-blue-950">
             <div className='h-screen text-white container mx-auto '>
@@ -31,7 +38,7 @@ function Home() {
                         <button className='bg-green-500 text-white rounded font-semibold hover:bg-white py-3 px-6 duration-300 hover:text-black '>Explore Course </button>
                         <button className='bg-white text-black py-3 px-6  rounded font-semibold hover:bg-green-500 duration-300 hover:text-white '>Course Videos</button>
                     </div>
-                </section>5
+                </section>
                 <section>Section2</section>
                 <hr />
                 {/* Footer */}
@@ -72,7 +79,7 @@ function Home() {
                                 <li className='hover:text-white cursor-pointer duration-300'>Refund & Cancellation</li>
                             </ul>
                         </div>
-                     </div>
+                    </div>
                 </footer>
             </div>
         </div>
