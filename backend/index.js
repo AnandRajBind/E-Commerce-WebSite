@@ -9,8 +9,10 @@ import mongoose from 'mongoose';// mongoose is a MongoDB object modeling tool de
  // it is used to connect database and create schema for the data.
  import { v2 as cloudinary } from 'cloudinary';
  import courseRoute from "./routes/course.route.js";
+ import userRoute from "./routes/user.route.js";
  import fileUpload from 'express-fileupload';
  // create server using express 
+
 const app = express()
 dotenv.config();
 app.use(express.json())
@@ -33,7 +35,9 @@ catch(err){
   console.log(err)
 }
 // defining routes
-app.use("/api/v1/course",courseRoute);// this is the route for course
+app.use("/api/v1/course",courseRoute);
+app.use("/api/v1/user",userRoute);
+// this is the route for course
 // Cloudinary configuration code 
  cloudinary.config({ 
         cloud_name: process.env.cloud_name, 
