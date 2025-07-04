@@ -132,3 +132,13 @@ export const courseDetails = async (req, res) => {
   }
 
 }
+
+export const buyCourses=async(req,res)=>{
+  const { userId } = req.user; // Extracting userId from the authenticated user
+  const {courseId}=req.params
+  try {
+    
+  } catch (error) {
+    
+  }
+}

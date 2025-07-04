@@ -1,5 +1,6 @@
 import express from 'express';
-import { createCourse, updateCourse, deleteCourse, getCourses,courseDetails} from '../controllers/course.controller.js';
+import { createCourse, updateCourse, deleteCourse, getCourses,courseDetails,buyCourses} from '../controllers/course.controller.js';
+import userMiddleware from '../middlewares/user.mid.js';
 
 const router = express.Router();// create express router
 
@@ -12,4 +13,7 @@ router.put('/update/:courseId', updateCourse);
 router.delete('/delete/:courseId', deleteCourse);
 router.get('/Courses', getCourses);
 router.get('/:courseId', courseDetails);
+
+router.post('/buy/:courseId',userMiddleware ,buyCourses)
+
 export default router; // Export
