@@ -2,6 +2,9 @@
 import { User } from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 import { z } from 'zod';
+import jwt from 'jsonwebtoken';
+import config from '../config.js';
+
 
 export const signup = async (req, res) => {
     // zod library are used to validate the data
@@ -31,8 +34,6 @@ export const signup = async (req, res) => {
         res.status(500).json({ message: "error in signup ", error: error.message });
     }
 }
-
-
 export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -41,10 +42,13 @@ export const login = async (req, res) => {
         if (!user || !isPasswordCorrect) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
-        res.status(200).json({ message: "login successful", user })
+        // jwt are used to create a token for the user
+        const token = jwt.sign({ id: user._id }, config.JWT_USER_PASSWORD);
+// Set the token in the cookies
+        res.cookie("jwt", token);
+        res.status(200).json({ message: "login successful", user, token })
     } catch (error) {
         res.status(500).json({ message: "error in login", error: error.message });
         console.log(error.message);
-
     }
 }
