@@ -1,6 +1,7 @@
 // here write the business logic for course.
 
 import { Course } from "../models/course.model.js"; // Importing the Course model to interact with the course collection in the database
+import { Purchase } from "../models/purchase.model.js"; // Importing the Purchase model to interact with the purchase collection in the database
 import { v2 as cloudinary } from 'cloudinary'; // Importing cloudinary for image upload and management. Cloudinary is a cloud-based service that provides an end-to-end image and video management solution, including uploading, storing, manipulating, optimizing, and delivering images and videos for web and mobile applications.
 
 export const createCourse = async (req, res) => {
@@ -133,12 +134,24 @@ export const courseDetails = async (req, res) => {
 
 }
 
-export const buyCourses=async(req,res)=>{
-  const { userId } = req.user; // Extracting userId from the authenticated user
-  const {courseId}=req.params
+export const buyCourses = async (req, res) => {
+  const userId  = req.userId; // Extracting userId from the authenticated user
+  const { courseId } = req.params
   try {
-    
+    const course = await Course.findById(courseId); // Fetching the course by courseId
+    if (!course) {
+      return res.status(404).json({ errors: "Course not found" });
+    }
+    const existingPurchase = await Purchase.findOne({ userId, courseId }); // Check if the user has already purchased the course
+    if (existingPurchase) {
+      return res.status(400).json({ errors: "You have already purchased this course" });
+    }
+    const newPurchase = new Purchase({ userId, courseId }); // Creating a new purchase record
+    await newPurchase.save(); // Saving the purchase record to the database
+    res.status(200).json({ message: "Course purchased successfully", newPurchase });
   } catch (error) {
-    
+    res.status(500).json({ errors: 'Error in course buying' });
+    console.log("Error in course buying", error);
   }
 }
+
