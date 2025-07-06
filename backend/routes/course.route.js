@@ -13,6 +13,6 @@ router.delete('/delete/:courseId', deleteCourse);
 router.get('/Courses', getCourses);
 router.get('/:courseId', courseDetails);
 
-router.post('/buy/:courseId',userMiddleware, buyCourses)
+router.post('/buy/:courseId', userMiddleware, buyCourses)
 
 export default router; // Export

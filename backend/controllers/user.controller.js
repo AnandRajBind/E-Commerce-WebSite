@@ -4,6 +4,9 @@ import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
 import config from '../config.js';
+import { Purchase } from '../models/purchase.model.js'
+import { Course } from '../models/course.model.js'
+import 'dotenv/config';
 
 
 export const signup = async (req, res) => {
@@ -43,9 +46,16 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: "Invalid credentials" });
         }
         // jwt are used to create a token for the user
-        const token = jwt.sign({ id: user._id }, config.JWT_USER_PASSWORD);
-// Set the token in the cookies
-        res.cookie("jwt", token);
+        const token = jwt.sign({ id: user._id }, config.JWT_USER_PASSWORD, { expiresIn: "1d" });// Set the token to expire in 1 day
+
+        const cookieOptions = {
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
+            httpOnly: true, // Prevents client-side JavaScript from accessing the cookie or cannot be accessed by JavaScript directly
+            secure: process.env.NODE_ENV === "production", // Ensures the cookie is only sent over HTTPS in production
+            sameSite: "Strict" // Prevents the cookie from being sent with cross-site requests or CSRF attacks
+        }
+        // Set the token in the cookies
+        res.cookie("jwt", token, cookieOptions);
         res.status(200).json({ message: "login successful", user, token })
     } catch (error) {
         res.status(500).json({ message: "error in login", error: error.message });
@@ -53,11 +63,26 @@ export const login = async (req, res) => {
     }
 }
 
-export const logout =async (req, res)=>{
+export const logout = async (req, res) => {
     try {
         res.clearCookie("jwt");
         res.status(200).json({ message: "logout successful" });
     } catch (error) {
         res.status(500).json({ message: "error in logout", error: error.message });
+    }
+}
+// show the all purchased courses at the time of course purchase
+export const purchases = async (req, res) => {
+    const userId = req.userId;
+    try {
+        const purchased = await Purchase.find({ userId });
+        let purchasedCourseId = [];
+        for (let i = 0; i < purchased.length; i++) {
+            purchasedCourseId.push(purchased[i].courseId);
+        }
+        const courseData = await Course.find({ _id: { $in: purchasedCourseId } })
+        res.status(200).json({ purchased, courseData });
+    } catch (error) {
+        res.status(500).json({ message: "error in purchases", error: error.message });
     }
 }

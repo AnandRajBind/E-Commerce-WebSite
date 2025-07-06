@@ -4,12 +4,12 @@ import config from '../config.js';
 // token verification middleware
 function userMiddleware(req, res, next) {
     const authHeader = req.headers.authorization;
-    console.log(authHeader)
+    //console.log(authHeader)
     if (!authHeader || !authHeader.startsWith('Bearer')) {
         return res.status(401).json({ message: "No token provided" });
     }
     const token = authHeader.split(' ')[1];// Extract the token from the header
-    console.log("Token:", token); // Log the token for debugging purposes
+   // console.log("Token:", token); // Log the token for debugging purposes
     try {
         const decode = jwt.verify(token, config.JWT_USER_PASSWORD);
         req.userId = decode.id; // Attach the user ID to the request object
