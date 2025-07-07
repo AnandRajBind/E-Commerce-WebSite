@@ -47,7 +47,6 @@ export const login = async (req, res) => {
         }
         // jwt are used to create a token for the user
         const token = jwt.sign({ id: user._id }, config.JWT_USER_PASSWORD, { expiresIn: "1d" });// Set the token to expire in 1 day
-
         const cookieOptions = {
             expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
             httpOnly: true, // Prevents client-side JavaScript from accessing the cookie or cannot be accessed by JavaScript directly
@@ -62,7 +61,6 @@ export const login = async (req, res) => {
         console.log(error.message);
     }
 }
-
 export const logout = async (req, res) => {
     try {
         if (!req.cookies.jwt) {

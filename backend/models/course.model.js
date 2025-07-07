@@ -26,6 +26,10 @@ const courseSchema = new mongoose.Schema({
             required: true,
         }
     },
+    createrId:{
+        type:mongoose.Types.ObjectId,
+        ref:"User", // Reference to the User model
+    }
 }); 
 export const Course = mongoose.model("Course", courseSchema);// CourseSchema convert in model and export it as Course.and "Course" is the name of the collection in the database.
 
