@@ -1,38 +1,35 @@
 // const express = require('express');
-import { User } from '../models/user.model.js';
+import { Admin } from '../models/admin.model.js'; // Assuming you have a admin model defined
 import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
 import config from '../config.js';
-import { Purchase } from '../models/purchase.model.js'
-import { Course } from '../models/course.model.js'
-import 'dotenv/config';
-
+// import 'dotenv/config';
 
 export const signup = async (req, res) => {
     // zod library are used to validate the data
+    console.log("req.body", req.body);
     const { firstName, lastName, email, password } = req.body;
-    const userSchema = z.object({
+    const adminSchema = z.object({
         firstName: z.string().min(3, { message: "First name must be at least 3 characters " }),
         lastName: z.string().min(3, { message: "Last name must be at least 3 characters " }),
         email: z.string().min(3, { message: "email   must be at least 3 characters " }),
         password: z.string().min(6, { message: "password must be at least 6 characters " })
     });
-
-    const validateData = userSchema.safeParse(req.body);
+    const validateData = adminSchema.safeParse(req.body);
     if (!validateData.success) {
         return res.status(400).json({ errors: validateData.error.issues.map((err) => err.message) });
     }
     // bcrypt are used to hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     try {
-        const existingUser = await User.findOne({ email: email });
-        if (existingUser) {
-            return res.status(400).json({ message: "User already exists" })
+        const existingAdmin = await Admin.findOne({ email: email });
+        if (existingAdmin) {
+            return res.status(400).json({ message: "Admin already exists" })
         }
-        const newUser = new User({ firstName, lastName, email, password: hashedPassword });
-        await newUser.save();
-        res.status(200).json({ message: "User created successfully", user: newUser });
+        const newAdmin = new Admin({ firstName, lastName, email, password: hashedPassword });
+        await newAdmin.save();
+        res.status(200).json({ message: "Admin created successfully", admin: newAdmin });
     } catch (error) {
         res.status(500).json({ message: "error in signup ", error: error.message });
     }
@@ -40,13 +37,13 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ email: email });
-        const isPasswordCorrect = await bcrypt.compare(password, user.password);
-        if (!user || !isPasswordCorrect) {
+        const admin = await Admin.findOne({ email: email });
+        const isPasswordCorrect = await bcrypt.compare(password, admin.password);
+        if (!admin || !isPasswordCorrect) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
-        // jwt are used to create a token for the user
-        const token = jwt.sign({ id: user._id }, config.JWT_USER_PASSWORD, { expiresIn: "1d" });// Set the token to expire in 1 day
+        // jwt are used to create a token for the admin
+        const token = jwt.sign({ id: admin._id }, config.JWT_ADMIN_PASSWORD, { expiresIn: "1d" });// Set the token to expire in 1 day
 
         const cookieOptions = {
             expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
@@ -56,13 +53,12 @@ export const login = async (req, res) => {
         }
         // Set the token in the cookies
         res.cookie("jwt", token, cookieOptions);
-        res.status(200).json({ message: "login successful", user, token })
+        res.status(200).json({ message: "login successful", admin, token })
     } catch (error) {
         res.status(500).json({ message: "error in login", error: error.message });
         console.log(error.message);
     }
 }
-
 export const logout = async (req, res) => {
     try {
         if (!req.cookies.jwt) {
@@ -72,20 +68,5 @@ export const logout = async (req, res) => {
         res.status(200).json({ message: "logout successful" });
     } catch (error) {
         res.status(500).json({ message: "error in logout", error: error.message });
-    }
-}
-// show the all purchased courses at the time of course purchase
-export const purchases = async (req, res) => {
-    const userId = req.userId;
-    try {
-        const purchased = await Purchase.find({ userId });
-        let purchasedCourseId = [];
-        for (let i = 0; i < purchased.length; i++) {
-            purchasedCourseId.push(purchased[i].courseId);
-        }
-        const courseData = await Course.find({ _id: { $in: purchasedCourseId } })
-        res.status(200).json({ purchased, courseData });
-    } catch (error) {
-        res.status(500).json({ message: "error in purchases", error: error.message });
     }
 }

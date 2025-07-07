@@ -10,13 +10,20 @@ import mongoose from 'mongoose';// mongoose is a MongoDB object modeling tool de
  import { v2 as cloudinary } from 'cloudinary';
  import courseRoute from "./routes/course.route.js";
  import userRoute from "./routes/user.route.js";
+  import adminRoute from "./routes/admin.route.js";
  import fileUpload from 'express-fileupload';
  // create server using express 
+import cookieParser from 'cookie-parser';// cookie-parser is a middleware that parses cookies attached to the client request object.
+// it is used to parse the cookies in the request and make them available in the request object
+
+
 
 const app = express()
 dotenv.config();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());// this is used to parse the cookies in the request and make them available in the request object
+
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -37,6 +44,7 @@ catch(err){
 // defining routes
 app.use("/api/v1/course",courseRoute);
 app.use("/api/v1/user",userRoute);
+app.use("/api/v1/admin",adminRoute);
 // this is the route for course
 // Cloudinary configuration code 
  cloudinary.config({ 
