@@ -2,16 +2,70 @@ import React from 'react'
 import logo from '/logo.webp'
 import { Link } from 'react-router-dom'
 import { FaFacebook, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa"
+import { useEffect, useState } from 'react' // Importing useEffect for side effects in functional components
+import Slider from 'react-slick'; // Importing Slider from react-slick for creating carousels
+import axios from 'axios'// Importing axios for making HTTP requests
 
 function Home() {
-    const fetchCourses = () => {
-        try {
-            axios.get('')
-        } catch (error) {
-            console.log("Error fetching courses:" + error);
-        }
-    }
-    
+    const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
+
+    // axios library are used to fetch data from the backend
+    useEffect(() => {
+        const fetchCourses = async () => { // Function to fetch courses from the backend API
+            try {
+                const response = await axios.get('http://localhost:4001/api/v1/course/courses',
+                    {
+                        withCredentials: true, // Sending cookies with the request
+                    }
+                ); // Making a GET request to the backend API to fetch courses
+
+                console.log("Courses fetched successfully:", response.data.courses); // Logging the fetched courses to the console
+                setCourses(response.data.courses); // Setting the fetched courses to the state
+            }
+            catch (error) {
+                console.log("Error fetching courses:", error);
+            }
+        };
+        fetchCourses(); // Calling the function to fetch courses
+    }, []);
+
+    // Settings for the carousel using react-slick
+    var settings = {
+        dots: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        initialSlide: 0,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    initialSlide: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
+    };
+
+
     return (
         <div className="bg-gradient-to-r from-black to-blue-950">
             <div className='h-screen text-white container mx-auto '>
@@ -39,7 +93,25 @@ function Home() {
                         <button className='bg-white text-black py-3 px-6  rounded font-semibold hover:bg-green-500 duration-300 hover:text-white '>Course Videos</button>
                     </div>
                 </section>
-                <section>Section2</section>
+                <section>
+                    <Slider {...settings}>
+                        {
+                            courses.map((course) => (
+                                <div key={course._id}>
+                                    <div>
+                                        <div>
+                                            <img src={course.image.url} alt="" />
+                                            <div>
+                                                <h2>{course.title}</h2>
+                                                <button>Enroll Now</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </Slider>
+                </section>
                 <hr />
                 {/* Footer */}
                 <footer className='my-6'>
