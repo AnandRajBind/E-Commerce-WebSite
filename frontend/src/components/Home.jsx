@@ -11,7 +11,6 @@ import Slider from 'react-slick'; // Importing Slider from react-slick for creat
 
 function Home() {
     const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
-
     // axios library are used to fetch data from the backend
     useEffect(() => {
         const fetchCourses = async () => { // Function to fetch courses from the backend API
