@@ -3,8 +3,11 @@ import logo from '/logo.webp'
 import { Link } from 'react-router-dom'
 import { FaFacebook, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa"
 import { useEffect, useState } from 'react' // Importing useEffect for side effects in functional components
-import Slider from 'react-slick'; // Importing Slider from react-slick for creating carousels
+
 import axios from 'axios'// Importing axios for making HTTP requests
+import "slick-carousel/slick/slick.css";// Importing slick carousel styles
+import "slick-carousel/slick/slick-theme.css";
+import Slider from 'react-slick'; // Importing Slider from react-slick for creating carousels
 
 function Home() {
     const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
@@ -32,17 +35,18 @@ function Home() {
     // Settings for the carousel using react-slick
     var settings = {
         dots: true,
-        infinite: false,
+        infinite: true,
         speed: 500,
         slidesToShow: 4,
-        slidesToScroll: 4,
+        slidesToScroll: 1,
         initialSlide: 0,
+        autoplay:true,
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
                     slidesToShow: 3,
-                    slidesToScroll: 3,
+                    slidesToScroll: 2,
                     infinite: true,
                     dots: true
                 }
@@ -94,16 +98,16 @@ function Home() {
                     </div>
                 </section>
                 <section>
-                    <Slider {...settings}>
+                    <Slider  className="" {...settings}>
                         {
                             courses.map((course) => (
-                                <div key={course._id}>
-                                    <div>
-                                        <div>
-                                            <img src={course.image.url} alt="" />
-                                            <div>
-                                                <h2>{course.title}</h2>
-                                                <button>Enroll Now</button>
+                                <div key={course._id} className='p-4'>
+                                    <div className='relative flex-shrink-0 w-92 transition-transform duration-300 transform hover:scale-105'>
+                                        <div className='bg-gray-900 rounded-lg overflow-hidden'>
+                                            <img className='h-32 w-full object-contain' src={course.image.url} alt="" />
+                                            <div className='p-5 text-center'>
+                                                <h2 className='text-xl font-bold text-white'>{course.title}</h2>
+                                                <button className='mt-2 bg-orange-500 text-white py-2 px-4 rounded-full hover:bg-blue-500 duration-300'>Enroll Now</button>
                                             </div>
                                         </div>
                                     </div>
