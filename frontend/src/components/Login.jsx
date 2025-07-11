@@ -31,11 +31,12 @@ const Login = () => {
             });
             console.log("Login Successfull", response.data);
             toast.success(response.data.message);//backend response message
-        //    alert("Login Successfull ");
+            //    alert("Login Successfull ");
+            localStorage.setItem("user",JSON.stringify(response.data.token))
             navigate("/")
         } catch (error) {
             if (error.response) {
-              //   alert(error.response.data.errors)  //console error:  Cannot read properties of null (reading 'password')
+                //   alert(error.response.data.errors)  //console error:  Cannot read properties of null (reading 'password')
                 setErrorMessage(error.response.data.errors || "Login faild");
                 // setErrorMessage("Login faild");
             }

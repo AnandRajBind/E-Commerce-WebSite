@@ -8,10 +8,35 @@ import axios from 'axios'// Importing axios for making HTTP requests
 import "slick-carousel/slick/slick.css";// Importing slick carousel styles
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick'; // Importing Slider from react-slick for creating carousels
+import { toast } from 'react-hot-toast'; // Importing toast for displaying notifications
 
 function Home() {
+    useEffect(() => {
+        const token = localStorage.getItem("user");
+        if (token) {
+            setIsLoggedIn(true); // If token exists, set isLoggedIn to true
+        }
+        else {
+            setIsLoggedIn(false); // If token does not exist, set isLoggedIn to false
+        }
+    }, [])
     const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
     // axios library are used to fetch data from the backend
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
+
+    const handleLogout = async () => {
+        try {
+            const response = await axios.get('http://localhost:4001/api/v1/user/logout', {
+                withCredentials: true,
+            })
+            toast.success(response.data.message); // Displaying success message using toast
+            setIsLoggedIn(false); // Setting isLoggedIn state to false
+        } catch (error) {
+            toast.error(error.response.data.errors || "Logout failed"); // Displaying error message using toast
+            console.log("Error in logout", error);
+        }
+    }
     useEffect(() => {
         const fetchCourses = async () => { // Function to fetch courses from the backend API
             try {
@@ -39,7 +64,7 @@ function Home() {
         slidesToShow: 4,
         slidesToScroll: 1,
         initialSlide: 0,
-        autoplay:true,
+        autoplay: true,
         responsive: [
             {
                 breakpoint: 1024,
@@ -78,13 +103,15 @@ function Home() {
                         <img src={logo} alt="image not found " className='w-10 h-10 rounded-full' />
                         <h1 className='text-orange-500 text-2xl font-bold'>CourseHaven</h1>
                     </div>
-
                     <div className=' space-x-4'>
-                        <Link to={'/login'} className='bg-transparent text-white py-2 px-4 border  border-white rounded '>Login</Link>
-                        <Link to={'/signup'} className='bg-transparent text-white py-2 px-4 border  border-white rounded '>Signup</Link>
+                        {isLoggedIn ? (<button onClick={handleLogout} className='bg-transparent text-white py-2 px-4 border  border-white rounded '>Logout</button>
+                        ) : (
+                            <>
+                                <Link to={'/login'} className='bg-transparent text-white py-2 px-4 border  border-white rounded '>Login</Link>
+                                <Link to={'/signup'} className='bg-transparent text-white py-2 px-4 border  border-white rounded '>Signup</Link>
+                            </>
+                        )}
                     </div>
-
-
                 </header>
                 {/* Main section */}
                 <section className='text-center py-12'>
@@ -97,7 +124,7 @@ function Home() {
                     </div>
                 </section>
                 <section>
-                    <Slider  className="" {...settings}>
+                    <Slider className="" {...settings}>
                         {
                             courses.map((course) => (
                                 <div key={course._id} className='p-4'>
