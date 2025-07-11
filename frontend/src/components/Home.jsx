@@ -11,6 +11,11 @@ import Slider from 'react-slick'; // Importing Slider from react-slick for creat
 import { toast } from 'react-hot-toast'; // Importing toast for displaying notifications
 
 function Home() {
+     const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
+    // axios library are used to fetch data from the backend
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
+
     useEffect(() => {
         const token = localStorage.getItem("user");
         if (token) {
@@ -20,11 +25,7 @@ function Home() {
             setIsLoggedIn(false); // If token does not exist, set isLoggedIn to false
         }
     }, [])
-    const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
-    // axios library are used to fetch data from the backend
-
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
-
+   
     const handleLogout = async () => {
         try {
             const response = await axios.get('http://localhost:4001/api/v1/user/logout', {
@@ -119,8 +120,8 @@ function Home() {
                     <br />
                     <p className='text-gray-500'>Sharpen Your Skills with Course Crafted By experts.</p>
                     <div className='space-x-4 mt-6'>
-                        <button className='bg-green-500 text-white rounded font-semibold hover:bg-white py-3 px-6 duration-300 hover:text-black '>Explore Course </button>
-                        <button className='bg-white text-black py-3 px-6  rounded font-semibold hover:bg-green-500 duration-300 hover:text-white '>Course Videos</button>
+                        <Link to={'/courses'} className='bg-green-500 text-white rounded font-semibold hover:bg-white py-3 px-6 duration-300 hover:text-black '>Explore Course </Link>
+                        <Link to={'https://www.codecademy.com/resources/videos'} className='bg-white text-black py-3 px-6  rounded font-semibold hover:bg-green-500 duration-300 hover:text-white '>Course Videos</Link>
                     </div>
                 </section>
                 <section>
