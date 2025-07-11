@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import logo from '/logo.webp'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
 
 const Signup = () => {
 
@@ -10,6 +11,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,15 +26,15 @@ const Signup = () => {
         email,
         password
       }, {
-
         withCredentials: true,
         headers: {
           "content-Type": "application/json",
         },
       });
       console.log("Signup Successfull", response.data);
-      alert(response.data.message);//backend response message
+      toast.success(response.data.message);//backend response message
       // alert("Signup Successfull");
+      navigate("/login");
     } catch (error) {
       if (error.response) {
         alert(error.response.data.errors)

@@ -43,7 +43,7 @@ export const login = async (req, res) => {
         const user = await User.findOne({ email: email });
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!user || !isPasswordCorrect) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(400).json({ errors: "Invalid credentials" });
         }
         // jwt are used to create a token for the user
         const token = jwt.sign({ id: user._id }, config.JWT_USER_PASSWORD, { expiresIn: "1d" });// Set the token to expire in 1 day
@@ -55,10 +55,11 @@ export const login = async (req, res) => {
         }
         // Set the token in the cookies
         res.cookie("jwt", token, cookieOptions);
-        res.status(200).json({ message: "login successful", user, token })
+        res.status(200).json({ message: "Login successful", user, token })
     } catch (error) {
-        res.status(500).json({ message: "error in login", error: error.message });
-        console.log(error.message);
+        // res.status(500).json({ errors: "Error in login", error: error.message });
+        res.status(500).json({ errors: "Error in login"});
+        console.log("error in login", error.message);
     }
 }
 export const logout = async (req, res) => {
@@ -67,9 +68,10 @@ export const logout = async (req, res) => {
             return res.status(401).json({ error: "kindly login first" })
         }
         res.clearCookie("jwt");
-        res.status(200).json({ message: "logout successful" });
+        res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
-        res.status(500).json({ message: "error in logout", error: error.message });
+        res.status(500).json({ errors: "Error in logout", error: error.message });
+   console.log("error in logout", error);
     }
 }
 // show the all purchased courses at the time of course purchase
@@ -84,6 +86,7 @@ export const purchases = async (req, res) => {
         const courseData = await Course.find({ _id: { $in: purchasedCourseId } })
         res.status(200).json({ purchased, courseData });
     } catch (error) {
-        res.status(500).json({ message: "error in purchases", error: error.message });
+        res.status(500).json({errors: "Error in purchases", error: error.message });
+    console.log("error in purchases", error);
     }
 }
