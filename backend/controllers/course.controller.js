@@ -138,7 +138,6 @@ export const courseDetails = async (req, res) => {
     res.status(500).json({ errors: "Error fetching course details" });
     console.log("Error fetching course details", error);
   }
-
 }
 
 export const buyCourses = async (req, res) => {

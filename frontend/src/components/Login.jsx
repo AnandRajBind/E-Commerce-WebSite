@@ -32,7 +32,9 @@ const Login = () => {
             console.log("Login Successfull", response.data);
             toast.success(response.data.message);//backend response message
             //    alert("Login Successfull ");
-            localStorage.setItem("user",JSON.stringify(response.data.token))
+            localStorage.setItem("user",JSON.stringify({token:response.data.token,
+                user: response.data.user, // Storing user data in local storage
+            }))
             navigate("/")
         } catch (error) {
             if (error.response) {
