@@ -20,7 +20,7 @@ import axios from 'axios';
     }
     try {
       setLoading(true);
-      const response =await axios.post(`http://localhost:4001/api/v1/course/buy/${courseId}`, {}, {
+      const response =await axios.post(`http://localhost:4001/api/v1/course/buy/${courseId}`,{},{
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -30,9 +30,12 @@ import axios from 'axios';
       navigate('/purchases')
       setLoading(false)
     } catch (error) {
-      if (error?.response?.status === 404) {
+      setLoading(false);
+      if (error?.response?.status === 400) {
         toast.error("You have already purchased this course")
-      }else{
+ setTimeout(() => {
+      navigate('/purchases');
+    }, 1000); // Delay of 1 second       
         toast.error(error?.response?.data?.errors)
       }
     }

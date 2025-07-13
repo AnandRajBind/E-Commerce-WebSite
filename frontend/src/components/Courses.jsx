@@ -1,6 +1,6 @@
- import axios from 'axios'// Importing axios for making HTTP requests
+import axios from 'axios'// Importing axios for making HTTP requests
 import React, { useState, useEffect } from "react";// Importing useEffect for side effects in functional components
- import { FaCircleUser } from "react-icons/fa6";
+import { FaCircleUser } from "react-icons/fa6";
 import { RiHome2Fill } from "react-icons/ri";
 import { FaDiscourse } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa6";
@@ -14,63 +14,64 @@ import { Link } from "react-router-dom";
 
 
 function Courses() {
-    const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
-    const [loading, setLoading] = useState(true); // State to manage loading state
-    console.log("courses",courses);
+  const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
+  const [loading, setLoading] = useState(true); // State to manage loading state
+  console.log("courses", courses);
 
-    useEffect(() => {
-        const token = localStorage.getItem("user");
-        if (token) {
-            setIsLoggedIn(true); // If token exists, set isLoggedIn to true
-        }
-        else {
-            setIsLoggedIn(false); // If token does not exist, set isLoggedIn to false
-        }
-    }, [])
-
-    const handleLogout = async () => {
-        try {
-            const response = await axios.get('http://localhost:4001/api/v1/user/logout', {
-                withCredentials: true,
-            })
-            toast.success(response.data.message); // Displaying success message using toast
-           localStorage.removeItem("user"); // Removing user token from local storage
-            setIsLoggedIn(false); // Setting isLoggedIn state to false
-        } catch (error) {
-            console.log("Error in logout", error);
-            toast.error(error.response.data.errors || "Logout failed"); // Displaying error message using toast
-        }
+  useEffect(() => {
+    const token = localStorage.getItem("user");
+    if (token) {
+      setIsLoggedIn(true); // If token exists, set isLoggedIn to true
     }
-    useEffect(() => {
-        const fetchCourses = async () => { // Function to fetch courses from the backend API
-            try {
-                const response = await axios.get('http://localhost:4001/api/v1/course/courses',
-                    {
-                        withCredentials: true, // Sending cookies with the request
-                    }
-                ); // Making a GET request to the backend API to fetch courses
+    else {
+      setIsLoggedIn(false); // If token does not exist, set isLoggedIn to false
+    }
+  }, [])
 
-                console.log("Courses fetched successfully:", response.data.courses); // Logging the fetched courses to the console
-                setCourses(response.data.courses); // Setting the fetched courses to the state
-            setLoading(false); // Setting loading state to false after fetching courses
-            }
-            catch (error) {
-                console.log("Error fetching courses:", error);
-            }
-        };
-        fetchCourses(); // Calling the function to fetch courses
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get('http://localhost:4001/api/v1/user/logout', {
+        withCredentials: true,
+      })
+      toast.success(response.data.message); // Displaying success message using toast
+      localStorage.removeItem("user"); // Removing user token from local storage
+      setIsLoggedIn(false); // Setting isLoggedIn state to false
+    } catch (error) {
 
-    }, []);
+      console.log("Error in logout", error);
+      toast.error(error.response.data.errors || "Logout failed"); // Displaying error message using toast
+    }
+  }
+  useEffect(() => {
+    const fetchCourses = async () => { // Function to fetch courses from the backend API
+      try {
+        const response = await axios.get('http://localhost:4001/api/v1/course/courses',
+          {
+            withCredentials: true, // Sending cookies with the request
+          }
+        ); // Making a GET request to the backend API to fetch courses
+
+        console.log("Courses fetched successfully:", response.data.courses); // Logging the fetched courses to the console
+        setCourses(response.data.courses); // Setting the fetched courses to the state
+        setLoading(false); // Setting loading state to false after fetching courses
+      }
+      catch (error) {
+         console.log("Error fetching courses:", error);
+      }
+    };
+    fetchCourses(); // Calling the function to fetch courses
+
+  }, []);
 
 
-     return (
+  return (
     <div className="flex">
       {/* Hamburger menu button for mobile */}
-     
+
       {/* Sidebar */}
       <aside
-        className= ""
+        className=""
       >
         <div className="flex items-center mb-10 mt-10 md:mt-0">
           <img src={logo} alt="Profile" className="rounded-full h-12 w-12" />
