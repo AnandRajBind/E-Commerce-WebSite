@@ -21,7 +21,7 @@ function Buy() {
 
   const stripe = useStripe();
   const elements = useElements();
-const[cardError, setCardError] = useState("");
+  const [cardError, setCardError] = useState("");
 
   useEffect(() => {
     const fetchBuyCoursedata = async () => {
@@ -67,7 +67,7 @@ const[cardError, setCardError] = useState("");
       return;
     }
 
-    setLoadingg(false);
+    setLoading(false);
     const card = elements.getElement(CardElement);
 
     if (card == null) {
@@ -89,32 +89,42 @@ const[cardError, setCardError] = useState("");
     } else {
       console.log('Payment method Created', paymentMethod);
     }
-  };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: '16px',
-              color: '#424770',
-              '::placeholder': {
-                color: '#aab7c4',
-              },
-            },
-            invalid: {
-              color: '#9e2146',
-            },
+    if (!clientSecret) {
+      console.log("No client Secret Found");
+      setLoading(false);
+      return;
+    }
+    const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(
+      clientSecret,
+      {
+        payment_method: {
+          card: card,
+          billing_details: {
+            name: user?.user?.firstName,
+            email: user?.user?.email,
           },
-        }}
-      />
-      <button type="submit" disabled={!stripe}>
-        Pay
-      </button>
-    </form>
-  );
-}
+        },
+      },
+    );
+
+    if (confirmError) {
+      setCardError(confirmError.message);
+    } else if (paymentIntent.status === "succeeded") {
+      console.log("Payment Successful", paymentIntent);
+      setCardError("Your Payment Id", paymentIntent.id);
+
+      const paymentInfo = {
+        email: user?.user?.email,
+        userId: user.user._id,
+        courseId: courseId,
+        paymentId: paymentIntent.id,
+        amount: paymentIntent.amount,
+        status: paymentIntent.status
+      }
+      console.log("Payment info",paymentInfo);
+    }
+  }
 
 
 return (
