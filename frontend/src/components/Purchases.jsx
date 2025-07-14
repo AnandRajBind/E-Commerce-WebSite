@@ -57,6 +57,7 @@ function Purchases() {
                 setPurchases(response.data.courseData)
             } catch (error) {
                 setErrorMessage("Failed to fetch purchases data");
+                console.log("Error fetching purchases:", error);
             }
         };
         fetchPurchases(); // Calling the function to fetch purchases

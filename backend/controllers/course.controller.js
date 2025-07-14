@@ -1,4 +1,6 @@
 // here write the business logic for course.
+ import Stripe from 'stripe';
+ import config from "../config.js";
 
 import { Course } from "../models/course.model.js"; // Importing the Course model to interact with the course collection in the database
 import { Purchase } from "../models/purchase.model.js"; // Importing the Purchase model to interact with the purchase collection in the database
@@ -141,6 +143,11 @@ export const courseDetails = async (req, res) => {
 }
 
 export const buyCourses = async (req, res) => {
+//  Stripe payment 
+
+ const stripe = new Stripe(config.STRIPE_SECRET_KEY); // Initializing Stripe with the secret key from the config file
+ console.log(stripe);
+ 
   const userId = req.userId; // Extracting userId from the authenticated user
   const { courseId } = req.params
   try {
