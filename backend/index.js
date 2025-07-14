@@ -17,8 +17,6 @@ import cors from 'cors';// cors is a middleware that allows cross-origin request
 import cookieParser from 'cookie-parser';// cookie-parser is a middleware that parses cookies attached to the client request object.
 // it is used to parse the cookies in the request and make them available in the request object
 
-
-
 const app = express()
 dotenv.config();
 app.use(express.json())

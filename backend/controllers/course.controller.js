@@ -1,6 +1,6 @@
 // here write the business logic for course.
- import Stripe from 'stripe';
- import config from "../config.js";
+import Stripe from 'stripe';
+import config from "../config.js";
 
 import { Course } from "../models/course.model.js"; // Importing the Course model to interact with the course collection in the database
 import { Purchase } from "../models/purchase.model.js"; // Importing the Purchase model to interact with the purchase collection in the database
@@ -69,15 +69,15 @@ export const createCourse = async (req, res) => {
 }
 
 export const updateCourse = async (req, res) => {
-  const adminId=req.adminId; // Extracting the adminId from the authenticated admin user
+  const adminId = req.adminId; // Extracting the adminId from the authenticated admin user
   const { courseId } = req.params; // Extracting the courseId from the request parameters
   const { title, description, price, image } = req.body; // Destructuring the request body to get course details
   try {
-const courseSearch=await Course.findById(courseId); // Finding the course by courseId
-if(!courseSearch){
-  return res.status(404).json({errors:"Course not found"})
-}
-    const course = await Course.updateOne({ _id: courseId , createrId: adminId }, // Finding the course by courseId and ensuring it belongs to the authenticated admin
+    const courseSearch = await Course.findById(courseId); // Finding the course by courseId
+    if (!courseSearch) {
+      return res.status(404).json({ errors: "Course not found" })
+    }
+    const course = await Course.updateOne({ _id: courseId, createrId: adminId }, // Finding the course by courseId and ensuring it belongs to the authenticated admin
       {
         title,
         description,
@@ -89,7 +89,7 @@ if(!courseSearch){
       }
     )
     res.status(201).json({
-      message: "Course updated successfully",course
+      message: "Course updated successfully", course
     })
   } catch (error) {
     res.status(500).json({ error: "Error in course updating" });
@@ -97,7 +97,7 @@ if(!courseSearch){
   }
 }
 export const deleteCourse = async (req, res) => {
-  const adminId=req.adminId; // Extracting the adminId from the authenticated admin user
+  const adminId = req.adminId; // Extracting the adminId from the authenticated admin user
   const { courseId } = req.params;
   try {
     const course = await Course.findOneAndDelete({ _id: courseId, createrId: adminId }); // Finding the course by courseId and ensuring it belongs to the authenticated admin
@@ -142,12 +142,14 @@ export const courseDetails = async (req, res) => {
   }
 }
 
-export const buyCourses = async (req, res) => {
+
 //  Stripe payment 
 
- const stripe = new Stripe(config.STRIPE_SECRET_KEY); // Initializing Stripe with the secret key from the config file
- console.log(stripe);
- 
+const stripe = new Stripe(config.STRIPE_SECRET_KEY); // Initializing Stripe with the secret key from the config file
+console.log(config.STRIPE_SECRET_KEY);
+
+
+export const buyCourses = async (req, res) => {
   const userId = req.userId; // Extracting userId from the authenticated user
   const { courseId } = req.params
   try {
@@ -159,9 +161,26 @@ export const buyCourses = async (req, res) => {
     if (existingPurchase) {
       return res.status(400).json({ errors: "You have already purchased this course" });
     }
+
+ // stripe code 
+  const amount=course.price;
+   const paymentIntent = await stripe.paymentIntents.create({
+    amount: amount,
+    currency: 'usd', // Specify the currency
+    payment_method_types: ['card']
+
+    });
+
+
     const newPurchase = new Purchase({ userId, courseId }); // Creating a new purchase record
     await newPurchase.save(); // Saving the purchase record to the database
-    res.status(200).json({ message: "Course purchased successfully", newPurchase });
+    res.status(200).json({ 
+      message: "Course purchased successfully", 
+      course,
+      clientSecret: paymentIntent.client_secret
+    
+    });
+
   } catch (error) {
     res.status(500).json({ errors: 'Error in course buying' });
     console.log("Error in course buying", error);
