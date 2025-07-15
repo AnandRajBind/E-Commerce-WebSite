@@ -170,10 +170,8 @@ export const buyCourses = async (req, res) => {
     payment_method_types: ['card']
 
     });
-
-
-    const newPurchase = new Purchase({ userId, courseId }); // Creating a new purchase record
-    await newPurchase.save(); // Saving the purchase record to the database
+    // const newPurchase = new Purchase({ userId, courseId }); // Creating a new purchase record
+    // await newPurchase.save(); // Saving the purchase record to the database
     res.status(200).json({ 
       message: "Course purchased successfully", 
       course,

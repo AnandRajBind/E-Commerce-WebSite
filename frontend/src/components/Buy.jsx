@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-
 function Buy() {
   const { courseId } = useParams();
   const [loading, setLoading] = useState(false);
@@ -124,13 +123,21 @@ function Buy() {
         status: paymentIntent.status
       }
       console.log("Payment info", paymentInfo);
+      await axios.post("http://localhost:4001/api/v1/order", paymentInfo, {
+        headers : {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }).then((response) => {
+        console.log(response.data)
+      }).catch((error) => {
+        toast.error("Error in order creation", error);
+      })
       toast.success("Payment Successful");
       navigate("/purchases");
     }
     setLoading(false);
-  }
-
-
+  };
   return (
     <>
       {error ? (
@@ -187,7 +194,6 @@ function Buy() {
                       },
                     }}
                   />
-
                   <button
                     type="submit"
                     disabled={!stripe || loading} // Disable button when loading
@@ -211,7 +217,6 @@ function Buy() {
         </div>
       )}
     </>
-
   )
 }
 export default Buy;

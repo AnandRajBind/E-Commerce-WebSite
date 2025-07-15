@@ -11,6 +11,8 @@ import { v2 as cloudinary } from 'cloudinary';
 import courseRoute from "./routes/course.route.js";
 import userRoute from "./routes/user.route.js";
 import adminRoute from "./routes/admin.route.js";
+import orderRoute from "./routes/order.route.js"; // Importing the order route
+
 import fileUpload from 'express-fileupload';
 import cors from 'cors';// cors is a middleware that allows cross-origin requests. it is used to allow the frontend to access the backend resources.
 // create server using express 
@@ -54,6 +56,7 @@ catch (err) {
 app.use("/api/v1/course", courseRoute);
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/admin", adminRoute);
+app.use("/api/v1/order", orderRoute); // Registering the order route
 // this is the route for course
 // Cloudinary configuration code 
 cloudinary.config({
