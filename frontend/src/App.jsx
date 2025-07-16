@@ -3,11 +3,18 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Courses from './components/Courses'; 
+import Courses from './components/Courses';
 import Purchases from './components/Purchases';
-import Buy from './components/Buy'; 
+import Buy from './components/Buy';
+import AdminSignup from './admin/AdminSignup';
+import AdminLogin from './admin/AdminLogin';
+import {CourseCreate} from './admin/CourseCreate';
+import {UpdateCourse} from './admin/UpdateCourse';
+import {OurCourses} from './admin/OurCourses';
+import {Dashboard }from './admin/Dashboard';
 
-import  { Toaster } from 'react-hot-toast';
+
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
@@ -20,8 +27,17 @@ function App() {
         <Route path='/courses' element={<Courses />} />
         <Route path='/Buy/:courseId' element={<Buy />} />
         <Route path='/purchases' element={<Purchases />} />
+        {/* Admin Route  */}
+
+
+        <Route path='/admin/signup' element={<AdminSignup />} />
+        <Route path='/admin/login' element={<AdminLogin />} />
+        <Route path='/admin/dashboard' element={<Dashboard />} />
+        <Route path='/admin/course-create' element={<CourseCreate />} />
+        <Route path='/admin/update-course/:id' element={<UpdateCourse />} />
+        <Route path='/admin/our-courses' element={<OurCourses />} />
       </Routes>
-       <Toaster />
+      <Toaster />
 
     </div>
   )

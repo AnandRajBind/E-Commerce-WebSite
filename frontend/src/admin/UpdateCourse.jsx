@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const UpdateCourses = () => {
+export const UpdateCourse = () => {
   return (
     <div>UpdateCourses</div>
   )
