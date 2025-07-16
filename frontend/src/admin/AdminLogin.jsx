@@ -29,13 +29,14 @@ const AdminLogin = () => {
                     "content-Type": "application/json",
                 },
             });
-            console.log("Login Successfull", response.data);
+            console.log("Admin login Successfull", response.data);
             toast.success(response.data.message);//backend response message
             //    alert("Login Successfull ");
-            localStorage.setItem("admin",JSON.stringify({token:response.data.token,
+            navigate("/admin/dashboard")
+            localStorage.setItem("admin", JSON.stringify({
+                token: response.data.token,
                 user: response.data.user, // Storing user data in local storage
             }))
-            navigate("/admin/dashboard")
         } catch (error) {
             if (error.response) {
                 //   alert(error.response.data.errors)  //console error:  Cannot read properties of null (reading 'password')
