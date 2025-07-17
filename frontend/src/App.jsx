@@ -8,7 +8,7 @@ import Purchases from './components/Purchases';
 import Buy from './components/Buy';
 import AdminSignup from './admin/AdminSignup';
 import AdminLogin from './admin/AdminLogin';
-import { CourseCreate } from './admin/CourseCreate';
+import  CourseCreate  from './admin/CourseCreate';
 import { UpdateCourse } from './admin/UpdateCourse';
 import { OurCourses } from './admin/OurCourses';
 import Dashboard from './admin/Dashboard';
@@ -18,7 +18,10 @@ function App() {
 
   const user = JSON.parse(localStorage.getItem("user"));
   const admin = JSON.parse(localStorage.getItem("admin"));
+  console.log("admin from localStorage:", admin);
+
   return (
+
     <div>
       <Routes>
         <Route path='/' element={<Home />} />
@@ -34,7 +37,8 @@ function App() {
         <Route path='/admin/signup' element={<AdminSignup />} />
         <Route path='/admin/login' element={<AdminLogin />} />
         <Route path='/admin/dashboard' element={admin ? <Dashboard /> : <Navigate to={"/admin/login"} />} />
-        <Route path='/admin/course-create' element={<CourseCreate />} />
+       
+        <Route path='/admin/create-course' element={<CourseCreate />} />
         <Route path='/admin/update-course/:id' element={<UpdateCourse />} />
         <Route path='/admin/our-courses' element={<OurCourses />} />
       </Routes>

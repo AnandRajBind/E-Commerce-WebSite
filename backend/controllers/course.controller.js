@@ -7,6 +7,7 @@ import { Purchase } from "../models/purchase.model.js"; // Importing the Purchas
 import { v2 as cloudinary } from 'cloudinary'; // Importing cloudinary for image upload and management. Cloudinary is a cloud-based service that provides an end-to-end image and video management solution, including uploading, storing, manipulating, optimizing, and delivering images and videos for web and mobile applications.
 
 export const createCourse = async (req, res) => {
+  
   console.log("Step 1: API call received");
   const adminId = req.adminId; // Extracting the adminId from the authenticated admin user.  
   const { title, description, price } = req.body; // Destructuring the request body to get course details 
