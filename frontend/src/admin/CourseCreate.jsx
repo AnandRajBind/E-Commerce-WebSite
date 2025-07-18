@@ -63,16 +63,14 @@ const CourseCreate = () => {
       toast.error(error?.response?.data?.errors)
     }
   }
-
-
   return (
  <div>
-      <div className="min-h-screen  py-5">
+      <div className="min-h-screen  py-5 px-15" >
         <div className="max-w-4xl mx-auto p-6 border  rounded-lg shadow-lg">
           <h3 className="text-2xl font-semibold mb-8">Create Course</h3>
 
-          <form onSubmit={handleCreateCourse} className="space-y-6">
-            <div className="space-y-2">
+          <form onSubmit={handleCreateCourse} className="space-y-5 ">
+            <div className="space-y-1">
               <label className="block text-lg">Title</label>
               <input
                 type="text"
@@ -83,7 +81,7 @@ const CourseCreate = () => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1">
               <label className="block text-lg">Description</label>
               <input
                 type="text"
@@ -94,7 +92,7 @@ const CourseCreate = () => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1">
               <label className="block text-lg">Price</label>
               <input
                 type="number"
@@ -123,7 +121,7 @@ const CourseCreate = () => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-blue-500 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
+              className=" w-full py-3 px-4 bg-blue-500 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
             >
               Create Course
             </button>
