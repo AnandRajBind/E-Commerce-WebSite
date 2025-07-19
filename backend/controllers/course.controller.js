@@ -72,23 +72,29 @@ export const createCourse = async (req, res) => {
 export const updateCourse = async (req, res) => {
   const adminId = req.adminId; // Extracting the adminId from the authenticated admin user
   const { courseId } = req.params; // Extracting the courseId from the request parameters
-  const { title, description, price, image } = req.body; // Destructuring the request body to get course details
+  let { title, description, price, image } = req.body; // Destructuring the request body to get course details
   try {
     const courseSearch = await Course.findById(courseId); // Finding the course by courseId
     if (!courseSearch) {
       return res.status(404).json({ errors: "Course not found" })
     }
-    const course = await Course.updateOne({ _id: courseId, createrId: adminId }, // Finding the course by courseId and ensuring it belongs to the authenticated admin
+    const course = await Course.findOneAndUpdate({ _id: courseId, createrId: adminId }, // Finding the course by courseId and ensuring it belongs to the authenticated admin
       {
         title,
         description,
         price,
         image: {
-          public_id: image.public_id,
-          url: image.url
+          public_id: image?.public_id,
+          url: image?.url,
         },
       }
     )
+
+     if (!course) {
+      return res
+        .status(404)
+        .json({ errors: "can't update, created by other admin" });
+    }
     res.status(201).json({
       message: "Course updated successfully", course
     })
@@ -105,6 +111,7 @@ export const deleteCourse = async (req, res) => {
     if (!course) {
       return res.status(404).json({ errors: "Course not found" })
     }
+    
     res.status(200).json({
       message: "Course deleted successfully",
       course
@@ -135,7 +142,7 @@ export const courseDetails = async (req, res) => {
     if (!course) {
       return res.status(404).json({ errors: "Course not found" });
     }
-    res.status(500).json({ message: "Course details fetched successfully", course });
+    res.status(200).json({ message: "Course details fetched successfully", course });
 
   } catch (error) {
     res.status(500).json({ errors: "Error fetching course details" });
