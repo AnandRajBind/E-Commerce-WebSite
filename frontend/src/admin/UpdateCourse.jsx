@@ -1,47 +1,46 @@
 import React from 'react'
-import {useNavigate,useParams } from 'react-router-dom'
-import { useEffect,useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 
 
- export const UpdateCourse = () => {
- 
-const {id}=useParams();
+export const UpdateCourse = () => {
+  const { id } = useParams();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-  const [loading, setLoading]=useState("")
-  const navigate=useNavigate();
+  const [loading, setLoading] = useState("")
+  const navigate = useNavigate();
 
-  useEffect(()=>{
-const fetchCourseData=async ()=>{
-  try {
-    const {data}=await axios.get(`http://localhost:4001/api/v1/course/${id}`,
-      {
-        withCredentials: true,
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      try {
+        const { data } = await axios.get(`http://localhost:4001/api/v1/course/${id}`,
+          {
+            withCredentials: true,
+          }
+        )
+        console.log(data);
+        setTitle(data.course.title);
+        setDescription(data.course.description)
+        setPrice(data.course.price);
+        setImagePreview(data.course.image.url);
+        setLoading(false);
+      } catch (error) {
+        console.log(error)
+        console.log("Faild to fetch course data", error)
+        setLoading(false)
       }
-    )
-    console.log(data);
-    setTitle(data.course.title);
-    setDescription(data.course.description)
-    setPrice(data.course.price);
-    setImagePreview(data.course.image.url);
-    setLoading(false);
-  } catch (error) {
-    console.log(error)
-    console.log("Faild to fetch course data", error)
-    setLoading(false)
-  }
-}
-fetchCourseData();
-  },[id])
+    }
+    fetchCourseData();
+  }, [id])
 
 
-  
+
   const changePhotoHandler = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -53,21 +52,21 @@ fetchCourseData();
   }
 
 
- const handleUpdateCourse = async (e) => {
+  const handleUpdateCourse = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
     formData.append("price", price);
     // formData.append("image", image);
-if(image){formData.append("image",image)}
+    if (image) { formData.append("image", image) }
 
     const admin = JSON.parse(localStorage.getItem("admin"));
     const token = admin.token;
     if (!token) {
       navigate("/admin/login");
       return
-    }  
+    }
     try {
       const response = await axios.put(`http://localhost:4001/api/v1/course/update/${id}`, formData, {
 
@@ -92,7 +91,7 @@ if(image){formData.append("image",image)}
     }
   }
   return (
- <div>
+    <div>
       <div className="min-h-screen py-10">
         <div className="max-w-4xl mx-auto p-6 border rounded-lg shadow-lg">
           <h3 className="text-2xl font-semibold mb-8">Update Course</h3>
@@ -145,7 +144,6 @@ if(image){formData.append("image",image)}
                 className="w-full px-3 py-2 border border-gray-400 rounded-md outline-none"
               />
             </div>
-
             <button
               type="submit"
               className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
@@ -156,5 +154,5 @@ if(image){formData.append("image",image)}
         </div>
       </div>
     </div>
-      )
+  )
 }
