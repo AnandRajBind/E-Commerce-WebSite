@@ -44,19 +44,19 @@ export const OurCourses = () => {
   // delete course
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:4001/api/v1/course/delete${id}`, {
+      const response = await axios.delete(`http://localhost:4001/api/v1/course/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }, withCredentials: true,
       });
       toast.success(response.data.message || "Course deleted successfully");
-      const updatedCourses = courses.filter((course) => course.id !== id); // Filtering out the deleted course from the courses array
+      const updatedCourses = courses.filter((course) => course._id !== id); // Filtering out the deleted course from the courses array
 
       setCourses(updatedCourses); // Updating the courses state to remove the deleted course
       console.log("Course deleted successfully:", response.data);
     } catch (error) {
       console.log("Error in deleting course:", error);
-      toast.error(error.response.data.message || "Error in deleting course")
+      toast.error(error?.response?.data?.errors || "Error in deleting course")
     }
   };
 

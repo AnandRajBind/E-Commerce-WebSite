@@ -152,7 +152,7 @@ function Courses() {
                   className="border border-gray-200 rounded-lg p-4 shadow-sm"
                 >
                   <img
-                    src={course.image.url}
+                    src={course.image?.url || 'default-course.png'}
                     alt={course.title}
                     className="rounded mb-4"
                   />

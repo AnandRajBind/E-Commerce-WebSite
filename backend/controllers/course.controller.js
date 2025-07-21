@@ -103,24 +103,26 @@ export const updateCourse = async (req, res) => {
     console.log("Error in course updating", error);
   }
 }
+
 export const deleteCourse = async (req, res) => {
-  const adminId = req.adminId; // Extracting the adminId from the authenticated admin user
+  const adminId = req.adminId;
   const { courseId } = req.params;
   try {
-    const course = await Course.findOneAndDelete({ _id: courseId, createrId: adminId }); // Finding the course by courseId and ensuring it belongs to the authenticated admin
+    const course = await Course.findOneAndDelete({
+      _id: courseId,
+      creatorId: adminId,
+    });
     if (!course) {
-      return res.status(404).json({ errors: "Course not found" })
+      return res
+        .status(404)
+        .json({ errors: "can't delete, created by other admin" });
     }
-    
-    res.status(200).json({
-      message: "Course deleted successfully",
-      course
-    })
-  }
-  catch (error) {
+    res.status(200).json({ message: "Course deleted successfully" });
+  } catch (error) {
     res.status(500).json({ errors: "Error in course deleting" });
+    console.log("Error in course deleting", error);
   }
-}
+};
 
 export const getCourses = async (req, res) => {
   try {

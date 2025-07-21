@@ -131,7 +131,7 @@ function Home() {
                                 <div key={course._id} className='p-4'>
                                     <div className='relative flex-shrink-0 w-92 transition-transform duration-300 transform hover:scale-105'>
                                         <div className='bg-gray-900 rounded-lg overflow-hidden'>
-                                            <img className='h-32 w-full object-contain' src={course.image.url} alt="" />
+                                            <img className='h-32 w-full object-contain' src={course.image?.url || "/default-image.png"} alt="" />
                                             <div className='p-5 text-center'>
                                                 <h2 className='text-xl font-bold text-white'>{course.title}</h2>
                                                 <button className='mt-2 bg-orange-500 text-white py-2 px-4 rounded-full hover:bg-blue-500 duration-300'>Enroll Now</button>

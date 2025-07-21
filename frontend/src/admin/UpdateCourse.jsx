@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 
 
 export const UpdateCourse = () => {
-  const { id } = useParams();
+  const {id: courseId } = useParams();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -19,7 +19,7 @@ export const UpdateCourse = () => {
   useEffect(() => {
     const fetchCourseData = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:4001/api/v1/course/${id}`,
+        const { data } = await axios.get(`http://localhost:4001/api/v1/course/${courseId}`,
           {
             withCredentials: true,
           }
@@ -28,7 +28,7 @@ export const UpdateCourse = () => {
         setTitle(data.course.title);
         setDescription(data.course.description)
         setPrice(data.course.price);
-        setImagePreview(data.course.image.url);
+        setImagePreview(data.course.image?.url ||"");
         setLoading(false);
       } catch (error) {
         console.log(error)
@@ -37,7 +37,7 @@ export const UpdateCourse = () => {
       }
     }
     fetchCourseData();
-  }, [id])
+  }, [courseId])
 
 
 
@@ -50,7 +50,6 @@ export const UpdateCourse = () => {
       setImage(file);
     }
   }
-
 
   const handleUpdateCourse = async (e) => {
     e.preventDefault();
@@ -68,7 +67,7 @@ export const UpdateCourse = () => {
       return
     }
     try {
-      const response = await axios.put(`http://localhost:4001/api/v1/course/update/${id}`, formData, {
+      const response = await axios.put(`http://localhost:4001/api/v1/course/update/${courseId}`, formData, {
 
         headers: {
           Authorization: `Bearer ${token}`,

@@ -12,7 +12,6 @@ router.put('/update/:courseId', adminMiddleware, updateCourse);
 router.delete('/delete/:courseId', adminMiddleware, deleteCourse);
 router.get('/Courses', getCourses);
 router.get('/:courseId', courseDetails);
-
 router.post('/buy/:courseId', userMiddleware, buyCourses)
 
 export default router; // Export
