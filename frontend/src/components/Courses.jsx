@@ -51,7 +51,6 @@ function Courses() {
             withCredentials: true, // Sending cookies with the request
           }
         ); // Making a GET request to the backend API to fetch courses
-
         console.log("Courses fetched successfully:", response.data.courses); // Logging the fetched courses to the console
         setCourses(response.data.courses); // Setting the fetched courses to the state
         setLoading(false); // Setting loading state to false after fetching courses
@@ -61,7 +60,6 @@ function Courses() {
       }
     };
     fetchCourses(); // Calling the function to fetch courses
-
   }, []);
 
 
@@ -103,14 +101,18 @@ function Courses() {
                 <Link to={"/"}
                   className="flex items-center"
                   onClick={handleLogout}
+
                 >
-                  <IoLogOut className="mr-2" /> Logout
+                  <IoLogOut className="mr-2" /> Logout 
                 </Link>
               ) : (
                 <Link to={"/login"} className="flex items-center">
                   <IoLogIn className="mr-2" /> Login
                 </Link>
+            
               )}
+
+           
             </li>
           </ul>
         </nav>

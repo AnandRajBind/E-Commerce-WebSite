@@ -10,7 +10,6 @@ export const OurCourses = () => {
   const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
   const [loading, setLoading] = useState(true); // State to manage loading state
   const navigate = useNavigate();
-
   const admin = JSON.parse(localStorage.getItem("admin"));
   const token = admin?.token;
 
@@ -18,7 +17,6 @@ export const OurCourses = () => {
     toast.error("Please Login to admin");
     navigate("/admin/login");
   }
-
 
   useEffect(() => {
     // fetch courses
@@ -59,7 +57,6 @@ export const OurCourses = () => {
       toast.error(error?.response?.data?.errors || "Error in deleting course")
     }
   };
-
   if (loading) {
     return <p className="text-center text-gray-500">Loading courses...</p>
   }
