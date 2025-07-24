@@ -3,6 +3,7 @@ import axios from 'axios'
 import logo from '/logo.webp'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
+import { BACKEND_URL } from '../utils/utils'; // Importing the backend URL from utils
 
 const Signup = () => {
 
@@ -20,7 +21,7 @@ const Signup = () => {
     // console.log(firstName, lastName, email, password);
     // sending data from frontend to backend for stored database.
     try {
-      const response = await axios.post('http://localhost:4001/api/v1/user/signup', {
+      const response = await axios.post(`${BACKEND_URL}/user/signup`, {
         firstName,
         lastName,
         email,

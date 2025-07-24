@@ -11,6 +11,8 @@ import { FiSearch } from "react-icons/fi";
 import logo from "/logo.webp";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { BACKEND_URL } from '../utils/utils'; // Importing the backend URL from utils
+
 
 
 function Courses() {
@@ -31,7 +33,7 @@ function Courses() {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get('http://localhost:4001/api/v1/user/logout', {
+      const response = await axios.get(`${BACKEND_URL}/user/logout`, {
         withCredentials: true,
       })
       toast.success(response.data.message); // Displaying success message using toast
@@ -46,7 +48,7 @@ function Courses() {
   useEffect(() => {
     const fetchCourses = async () => { // Function to fetch courses from the backend API
       try {
-        const response = await axios.get('http://localhost:4001/api/v1/course/courses',
+        const response = await axios.get(`${BACKEND_URL}/course/courses`,
           {
             withCredentials: true, // Sending cookies with the request
           }

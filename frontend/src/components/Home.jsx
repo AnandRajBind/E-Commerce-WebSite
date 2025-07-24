@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick.css";// Importing slick carousel styles
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick'; // Importing Slider from react-slick for creating carousels
 import { toast } from 'react-hot-toast'; // Importing toast for displaying notifications
-
+import { BACKEND_URL } from '../utils/utils'; // Importing the backend URL from utils
 function Home() {
      const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
     // axios library are used to fetch data from the backend
@@ -28,7 +28,7 @@ function Home() {
    
     const handleLogout = async () => {
         try {
-            const response = await axios.get('http://localhost:4001/api/v1/user/logout', {
+            const response = await axios.get(`${BACKEND_URL}/user/logout`, {
                 withCredentials: true,
             })
             toast.success(response.data.message); // Displaying success message using toast
@@ -41,7 +41,7 @@ function Home() {
     useEffect(() => {
         const fetchCourses = async () => { // Function to fetch courses from the backend API
             try {
-                const response = await axios.get('http://localhost:4001/api/v1/course/courses',
+                const response = await axios.get(`${BACKEND_URL}/course/courses`,
                     {
                         withCredentials: true, // Sending cookies with the request
                     }
