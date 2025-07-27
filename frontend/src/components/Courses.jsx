@@ -11,9 +11,7 @@ import { FiSearch } from "react-icons/fi";
 import logo from "/logo.webp";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import { BACKEND_URL } from '../utils/utils'; // Importing the backend URL from utils
-
-
+import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
 
 function Courses() {
   const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
@@ -58,7 +56,7 @@ function Courses() {
         setLoading(false); // Setting loading state to false after fetching courses
       }
       catch (error) {
-         console.log("Error fetching courses:", error);
+        console.log("Error fetching courses:", error);
       }
     };
     fetchCourses(); // Calling the function to fetch courses
@@ -105,16 +103,16 @@ function Courses() {
                   onClick={handleLogout}
 
                 >
-                  <IoLogOut className="mr-2" /> Logout 
+                  <IoLogOut className="mr-2" /> Logout
                 </Link>
               ) : (
                 <Link to={"/login"} className="flex items-center">
                   <IoLogIn className="mr-2" /> Login
                 </Link>
-            
+
               )}
 
-           
+
             </li>
           </ul>
         </nav>

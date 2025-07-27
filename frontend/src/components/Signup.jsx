@@ -3,9 +3,9 @@ import axios from 'axios'
 import logo from '/logo.webp'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
-import { BACKEND_URL } from '../utils/utils'; // Importing the backend URL from utils
+import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
 
-const Signup = () => {
+function Signup() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");

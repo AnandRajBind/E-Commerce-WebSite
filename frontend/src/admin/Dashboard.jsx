@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import logo from '/logo.webp'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
-import { BACKEND_URL } from '../../utils/utils'
+import { BACKEND_URL } from '../utils/utils.js'
 
 const Dashboard = () => {
   const handleLogout = async () => {

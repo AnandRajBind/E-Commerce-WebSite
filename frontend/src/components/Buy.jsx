@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { BACKEND_URL } from '../utils/utils'; // Importing the backend URL from utils
+import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
 function Buy() {
   const { courseId } = useParams();
   const [loading, setLoading] = useState(false);

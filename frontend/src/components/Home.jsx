@@ -9,13 +9,11 @@ import "slick-carousel/slick/slick.css";// Importing slick carousel styles
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick'; // Importing Slider from react-slick for creating carousels
 import { toast } from 'react-hot-toast'; // Importing toast for displaying notifications
-import { BACKEND_URL } from '../utils/utils'; // Importing the backend URL from utils
+import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
 function Home() {
      const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
     // axios library are used to fetch data from the backend
-
     const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
-
     useEffect(() => {
         const token = localStorage.getItem("user");
         if (token) {

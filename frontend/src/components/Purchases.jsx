@@ -9,7 +9,7 @@ import { IoMdSettings } from 'react-icons/io';
 import { IoLogIn, IoLogOut } from 'react-icons/io5';
 import { HiMenu, HiX } from "react-icons/hi"; // Icons for sidebar toggle
 import { useNavigate } from 'react-router-dom';
-import { BACKEND_URL } from '../utils/utils'; // Importing the backend URL from utilsz
+import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utilsz
 
 function Purchases() {
 
