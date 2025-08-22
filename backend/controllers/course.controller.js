@@ -110,7 +110,7 @@ export const deleteCourse = async (req, res) => {
   try {
     const course = await Course.findOneAndDelete({
       _id: courseId,
-      creatorId: adminId,
+      createrId: adminId,
     });
     if (!course) {
       return res
