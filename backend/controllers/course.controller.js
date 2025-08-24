@@ -70,27 +70,46 @@ export const createCourse = async (req, res) => {
 }
 
 export const updateCourse = async (req, res) => {
-  const adminId = req.adminId; // Extracting the adminId from the authenticated admin user
-  const { courseId } = req.params; // Extracting the courseId from the request parameters
-  let { title, description, price, image } = req.body; // Destructuring the request body to get course details
+  const adminId = req.adminId;
+  const { courseId } = req.params;
+  let { title, description, price } = req.body;
   try {
-    const courseSearch = await Course.findById(courseId); // Finding the course by courseId
+    const courseSearch = await Course.findById(courseId);
     if (!courseSearch) {
       return res.status(404).json({ errors: "Course not found" })
     }
-    const course = await Course.findOneAndUpdate({ _id: courseId, createrId: adminId }, // Finding the course by courseId and ensuring it belongs to the authenticated admin
+
+    let imageData = courseSearch.image; // Default to existing image
+
+    // If a new image is uploaded, process it
+    if (req.files && req.files.image) {
+      const image = req.files.image;
+      const allowedFormat = ["image/png", "image/jpeg"];
+      if (!allowedFormat.includes(image.mimetype)) {
+        return res.status(400).json({ errors: "Invalid image format. Only jpg and png are allowed." });
+      }
+      const cloud_response = await cloudinary.uploader.upload(image.tempFilePath);
+      if (!cloud_response || cloud_response.error) {
+        return res.status(400).json({ errors: "Error uploading image to Cloudinary" });
+      }
+      imageData = {
+        public_id: cloud_response.public_id,
+        url: cloud_response.secure_url,
+      };
+    }
+
+    const course = await Course.findOneAndUpdate(
+      { _id: courseId, createrId: adminId },
       {
         title,
         description,
         price,
-        image: {
-          public_id: image?.public_id,
-          url: image?.url,
-        },
-      }
-    )
+        image: imageData,
+      },
+      { new: true }
+    );
 
-     if (!course) {
+    if (!course) {
       return res
         .status(404)
         .json({ errors: "can't update, created by other admin" });

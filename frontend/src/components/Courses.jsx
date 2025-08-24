@@ -40,7 +40,8 @@ function Courses() {
     } catch (error) {
 
       console.log("Error in logout", error);
-      toast.error(error.response.data.errors || "Logout failed"); // Displaying error message using toast
+      // toast.error(error.response.data.errors || "Logout failed"); // Displaying error message using toast
+      toast.error(error.response.data.errors || "You have already logout! Please Login first"); // Displaying error message using toast
     }
   }
   useEffect(() => {

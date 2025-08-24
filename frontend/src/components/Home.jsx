@@ -10,32 +10,58 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick'; // Importing Slider from react-slick for creating carousels
 import { toast } from 'react-hot-toast'; // Importing toast for displaying notifications
 import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+
 function Home() {
-     const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
+    const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
     // axios library are used to fetch data from the backend
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
-    useEffect(() => {
-        const token = localStorage.getItem("user");
-        if (token) {
-            setIsLoggedIn(true); // If token exists, set isLoggedIn to true
-        }
-        else {
-            setIsLoggedIn(false); // If token does not exist, set isLoggedIn to false
-        }
-    }, [])
-   
+    // *********************************Login and logout without autContext *********************************************
+    // const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
+    // useEffect(() => {
+    //     const token = localStorage.getItem("user");
+    //     if (token) {
+    //         setIsLoggedIn(true); // If token exists, set isLoggedIn to true
+    //     }
+    //     else {
+    //         setIsLoggedIn(false); // If token does not exist, set isLoggedIn to false
+    //     }
+    // }, [])
+
+    // const handleLogout = async () => {
+    //     try {
+    //         const response = await axios.get(`${BACKEND_URL}/user/logout`, {
+    //             withCredentials: true,
+    //         })
+    //         toast.success(response.data.message); // Displaying success message using toast
+    //      //   localStorage.removeItem("user"); // Removing user token from local storage
+    //         setIsLoggedIn(false); // Setting isLoggedIn state to false
+
+    //         // window.location.reload();
+    //         // window.location.href="/";
+    //     } catch (error) {
+    //         // toast.error(error.response?.data?.errors || "Logout failed"); // Displaying error message using toast
+    //         toast.error(error.response?.data?.errors || "You have already Logout! Please Login First"); // Displaying error message using toast
+    //         // console.log("Error in logout", error);
+    //     }
+    // }
+
+    const { isLoggedIn, logout } = useContext(AuthContext);
+
     const handleLogout = async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/user/logout`, {
                 withCredentials: true,
-            })
-            toast.success(response.data.message); // Displaying success message using toast
-            setIsLoggedIn(false); // Setting isLoggedIn state to false
+            });
+            toast.success(response.data.message);
+            logout();
         } catch (error) {
-            toast.error(error.response.data.errors || "Logout failed"); // Displaying error message using toast
-            console.log("Error in logout", error);
+            toast.error(error.response?.data?.errors || "Logout failed");
         }
-    }
+    };
+
+
+
     useEffect(() => {
         const fetchCourses = async () => { // Function to fetch courses from the backend API
             try {
@@ -70,6 +96,7 @@ function Home() {
                 settings: {
                     slidesToShow: 3,
                     slidesToScroll: 2,
+
                     infinite: true,
                     dots: true
                 }
@@ -109,7 +136,9 @@ function Home() {
                                 <Link to={'/login'} className='bg-transparent text-white py-2 px-4 border  border-white rounded '>Login</Link>
                                 <Link to={'/signup'} className='bg-transparent text-white py-2 px-4 border  border-white rounded '>Signup</Link>
                             </>
-                        )}
+                        )} 
+ 
+
                     </div>
                 </header>
                 {/* Main section */}

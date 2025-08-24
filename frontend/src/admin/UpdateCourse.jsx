@@ -58,8 +58,10 @@ export const UpdateCourse = () => {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("price", price);
-    // formData.append("image", image);
-    if (image) { formData.append("image", image) }
+    // Only append image if a new file is selected
+    if (image instanceof File) {
+      formData.append("image", image);
+    }
 
     const admin = JSON.parse(localStorage.getItem("admin"));
     const token = admin.token;
