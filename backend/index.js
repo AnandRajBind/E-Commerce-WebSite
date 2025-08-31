@@ -57,6 +57,12 @@ app.use("/api/v1/course", courseRoute);
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/admin", adminRoute);
 app.use("/api/v1/order", orderRoute); // Registering the order route
+
+// Add this default route handler
+app.get("/", (req, res) => {
+  res.send("Backend is running!");
+});
+
 // this is the route for course
 // Cloudinary configuration code 
 cloudinary.config({
