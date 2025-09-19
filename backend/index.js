@@ -34,8 +34,25 @@ app.use(
 // cors is an error that occurs when a web application tries to access resources from a different port, protocol, or domain than its own.basically cors error occur when frontend and backend run different port. tab hamra frontend backend ko access karne ko try karta hai to hamra backend allow nhi hota hai.(kyoki ish tarah koi bhi hamra backend acces ker sakta hai.). because of cors error. so we need to use cors middleware to allow the frontend to access the backend resources.
 // to iske liye hame apne bakend me jaker batana hoga ki only ishi frontend ke request ko allow(data dena hai) karna hai aur kisi ko nhi.
 
+const allowedOrigins = [
+  'http://localhost:5173', // Local development
+  'http://localhost:3000', // Alternative local port
+  process.env.FRONTEND_URL, // Production frontend URL
+  'https://courseheaven-ashy.vercel.app/' // Fallback production URL
+].filter(Boolean); // Remove undefined values
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL, // this is the url of the frontend application
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('Blocked by CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true, // this is used to allow the cookies to be sent from the frontend to the backend
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // these are the methods that are allowed to be used by the frontend to access the backend resources
   allowedHeaders: ["Content-Type", "Authorization"] // these are the headers that are allowed to be used by the frontend to access the backend resources,
