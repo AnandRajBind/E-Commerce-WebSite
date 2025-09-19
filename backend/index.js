@@ -38,7 +38,7 @@ const allowedOrigins = [
   'http://localhost:5173', // Local development
   'http://localhost:3000', // Alternative local port
   process.env.FRONTEND_URL, // Production frontend URL
-  'https://courseheaven-ashy.vercel.app/' // Fallback production URL
+  'https://courseheaven-ashy.vercel.app' // Fallback production URL (removed trailing slash)
 ].filter(Boolean); // Remove undefined values
 
 app.use(cors({
@@ -46,10 +46,22 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // Normalize origin by removing trailing slash
+    const normalizedOrigin = origin.endsWith('/') ? origin.slice(0, -1) : origin;
+    const normalizedAllowedOrigins = allowedOrigins.map(url => 
+      url && url.endsWith('/') ? url.slice(0, -1) : url
+    );
+    
+    console.log('Origin:', origin);
+    console.log('Normalized Origin:', normalizedOrigin);
+    console.log('Allowed Origins:', normalizedAllowedOrigins);
+    
+    if (normalizedAllowedOrigins.includes(normalizedOrigin)) {
+      console.log('CORS: Origin allowed');
       callback(null, true);
     } else {
       console.log('Blocked by CORS:', origin);
+      console.log('Allowed origins:', normalizedAllowedOrigins);
       callback(new Error('Not allowed by CORS'));
     }
   },
