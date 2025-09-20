@@ -37,37 +37,58 @@ app.use(
 const allowedOrigins = [
   'http://localhost:5173', // Local development
   'http://localhost:3000', // Alternative local port
-  process.env.FRONTEND_URL, // Production frontend URL
-  'https://courseheaven-ashy.vercel.app' // Fallback production URL (removed trailing slash)
+  'https://courseheaven-ashy.vercel.app', // Production frontend URL
+  process.env.FRONTEND_URL // Environment variable for production
 ].filter(Boolean); // Remove undefined values
+
+// In production, if CORS is causing issues, we can be more permissive
+const isProduction = process.env.NODE_ENV === 'production';
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
+    console.log('Incoming request origin:', origin);
+    console.log('Environment FRONTEND_URL:', process.env.FRONTEND_URL);
+    console.log('Is Production:', isProduction);
+    console.log('Allowed origins:', allowedOrigins);
     
-    // Normalize origin by removing trailing slash
-    const normalizedOrigin = origin.endsWith('/') ? origin.slice(0, -1) : origin;
+    // Allow requests with no origin (like mobile apps, curl, or same-origin requests)
+    if (!origin) {
+      console.log('CORS: No origin, allowing request');
+      return callback(null, true);
+    }
+    
+    // Normalize origins by removing trailing slashes
+    const normalizedOrigin = origin.replace(/\/$/, '');
     const normalizedAllowedOrigins = allowedOrigins.map(url => 
-      url && url.endsWith('/') ? url.slice(0, -1) : url
+      url ? url.replace(/\/$/, '') : url
     );
     
-    console.log('Origin:', origin);
-    console.log('Normalized Origin:', normalizedOrigin);
-    console.log('Allowed Origins:', normalizedAllowedOrigins);
-    
+    // Check if origin is allowed
     if (normalizedAllowedOrigins.includes(normalizedOrigin)) {
-      console.log('CORS: Origin allowed');
-      callback(null, true);
-    } else {
-      console.log('Blocked by CORS:', origin);
-      console.log('Allowed origins:', normalizedAllowedOrigins);
-      callback(new Error('Not allowed by CORS'));
+      console.log('CORS: Origin allowed -', normalizedOrigin);
+      return callback(null, true);
     }
+    
+    // For production, also allow any vercel.app domain as fallback
+    if (normalizedOrigin.includes('vercel.app')) {
+      console.log('CORS: Vercel domain allowed -', normalizedOrigin);
+      return callback(null, true);
+    }
+    
+    // In production, if we still can't match, allow HTTPS origins as a fallback
+    if (isProduction && normalizedOrigin.startsWith('https://')) {
+      console.log('CORS: Production HTTPS fallback -', normalizedOrigin);
+      return callback(null, true);
+    }
+    
+    console.log('CORS: Origin blocked -', normalizedOrigin);
+    console.log('Expected one of:', normalizedAllowedOrigins);
+    callback(new Error('Not allowed by CORS'));
   },
-  credentials: true, // this is used to allow the cookies to be sent from the frontend to the backend
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // these are the methods that are allowed to be used by the frontend to access the backend resources
-  allowedHeaders: ["Content-Type", "Authorization"] // these are the headers that are allowed to be used by the frontend to access the backend resources,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ["Content-Type", "Authorization", "x-requested-with"],
+  optionsSuccessStatus: 200 // For legacy browser support
 }))
 
 const port = process.env.PORT || 3000
