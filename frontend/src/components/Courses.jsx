@@ -1,5 +1,5 @@
 import axios from 'axios'// Importing axios for making HTTP requests
-import React, { useState, useEffect } from "react";// Importing useEffect for side effects in functional components
+import React, { useState, useEffect, useContext } from "react";// Importing useEffect for side effects in functional components
 import { FaCircleUser } from "react-icons/fa6";
 import { RiHome2Fill } from "react-icons/ri";
 import { FaDiscourse } from "react-icons/fa";
@@ -12,22 +12,16 @@ import logo from "/logo.webp";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
+import { AuthContext } from '../context/AuthContext.jsx';
+import LoginDropdown from './LoginDropdown';
 
 function Courses() {
   const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
   const [loading, setLoading] = useState(true); // State to manage loading state
+  
+  const { isLoggedIn, logout } = useContext(AuthContext); // Using AuthContext instead of local state
+  
   console.log("courses", courses);
-
-  useEffect(() => {
-    const token = localStorage.getItem("user");
-    if (token) {
-      setIsLoggedIn(true); // If token exists, set isLoggedIn to true
-    }
-    else {
-      setIsLoggedIn(false); // If token does not exist, set isLoggedIn to false
-    }
-  }, [])
 
   const handleLogout = async () => {
     try {
@@ -36,7 +30,7 @@ function Courses() {
       })
       toast.success(response.data.message); // Displaying success message using toast
       localStorage.removeItem("user"); // Removing user token from local storage
-      setIsLoggedIn(false); // Setting isLoggedIn state to false
+      logout(); // Using AuthContext logout method
     } catch (error) {
 
       console.log("Error in logout", error);
@@ -107,13 +101,12 @@ function Courses() {
                   <IoLogOut className="mr-2" /> Logout
                 </Link>
               ) : (
-                <Link to={"/login"} className="flex items-center">
-                  <IoLogIn className="mr-2" /> Login
-                </Link>
-
+                <LoginDropdown 
+                  className="flex items-center w-full text-left hover:bg-gray-100 p-2 rounded"
+                  buttonText="Login"
+                  showIcon={true}
+                />
               )}
-
-
             </li>
           </ul>
         </nav>

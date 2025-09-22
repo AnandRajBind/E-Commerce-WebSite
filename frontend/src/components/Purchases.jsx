@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
@@ -10,35 +10,22 @@ import { IoLogIn, IoLogOut } from 'react-icons/io5';
 import { HiMenu, HiX } from "react-icons/hi"; // Icons for sidebar toggle
 import { useNavigate } from 'react-router-dom';
 import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utilsz
+import { AuthContext } from '../context/AuthContext.jsx';
+import LoginDropdown from './LoginDropdown';
 
 function Purchases() {
 
     const [purchases, setPurchases] = useState([]); // State to hold the courses fetched from the backend
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
     const [errorMessage, setErrorMessage] = useState();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar open state
 
-
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = user?.token;
-
-    console.log("purchase", purchases);
+    const { isLoggedIn, token, logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
+    console.log("purchase", purchases);
 
 
-    useEffect(() => {
-         if (token) {
-            setIsLoggedIn(true); // If token exists, set isLoggedIn to true
-        }
-        else {
-            setIsLoggedIn(false); // If token does not exist, set isLoggedIn to false
-        }
-    }, [])
-//   if (!token) {
-//     navigate("/login");
-//   }
-    
+
     useEffect(() => {
         const fetchPurchases = async () => {
             if (!token) {
@@ -62,7 +49,7 @@ function Purchases() {
             }
         };
         fetchPurchases(); // Calling the function to fetch purchases
-    }, []);
+    }, [token]);
 
 
     const handleLogout = async () => {
@@ -72,7 +59,7 @@ function Purchases() {
             })
             toast.success(response.data.message); // Displaying success message using toast
             localStorage.removeItem("user"); // Removing user token from local storage
-            setIsLoggedIn(false); // Setting isLoggedIn state to false
+            logout(); // Using AuthContext logout
             navigate("/login")
         } catch (error) {
             console.log("Error in logout", error);
@@ -118,9 +105,11 @@ function Purchases() {
                                     <IoLogOut className="mr-2" /> Logout
                                 </button>
                             ) : (
-                                <Link to="/login" className="flex items-center">
-                                    <IoLogIn className="mr-2" /> Login
-                                </Link>
+                                <LoginDropdown 
+                                    className="flex items-center w-full text-left hover:bg-gray-100 p-2 rounded"
+                                    buttonText="Login"
+                                    showIcon={true}
+                                />
                             )}
                         </li>
                     </ul>

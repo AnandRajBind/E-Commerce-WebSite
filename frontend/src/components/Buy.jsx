@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 // import toast from 'react-hot-toast'
 import axios from 'axios';
@@ -6,19 +6,19 @@ import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
+import { AuthContext } from '../context/AuthContext.jsx';
 function Buy() {
   const { courseId } = useParams();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  
+  const { isLoggedIn, user, token } = useContext(AuthContext);
 
   const [course, setCourse] = useState({});
   const [clientSecret, setClientSecret] = useState("");
   const [error, setError] = useState("");
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = user?.token;
-  console.log(token)
-
+  console.log("isLoggedIn:", isLoggedIn, "token:", token)
 
   const stripe = useStripe();
   const elements = useElements();
@@ -26,10 +26,10 @@ function Buy() {
 
   useEffect(() => {
     const fetchBuyCoursedata = async () => {
-      if (!token) {
+      if (!isLoggedIn || !token) {
         setError("Please login to buy the course");
         navigate("/login")
-        console.log(token)
+        console.log("Not logged in or no token")
         return;
       }
       try {
@@ -58,7 +58,7 @@ function Buy() {
       }
     }
     fetchBuyCoursedata(); // Calling the function to fetch course data
-  }, [courseId])
+  }, [courseId, isLoggedIn, token, navigate])
 
   const handlePurchase = async (event) => {
     event.preventDefault();
@@ -102,8 +102,8 @@ function Buy() {
         payment_method: {
           card: card,
           billing_details: {
-            name: user?.user?.firstName,
-            email: user?.user?.email,
+            name: user?.firstName,
+            email: user?.email,
           },
         },
       },
@@ -116,8 +116,8 @@ function Buy() {
       setCardError("Your Payment Id", paymentIntent.id);
 
       const paymentInfo = {
-        email: user?.user?.email,
-        userId: user.user._id,
+        email: user?.email,
+        userId: user._id,
         courseId: courseId,
         paymentId: paymentIntent.id,
         amount: paymentIntent.amount,

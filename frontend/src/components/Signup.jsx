@@ -4,6 +4,7 @@ import logo from '/logo.webp'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
+import LoginDropdown from './LoginDropdown';
 
 function Signup() {
 
@@ -52,16 +53,15 @@ function Signup() {
           <div className="flex items-center space-x-2">
             <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
             <Link to={"/"} className="text-xl font-bold text-orange-500">
-              CourseHaven
+              CourseHeaven
             </Link>
           </div>
           <div className="flex items-center space-x-4">
-            <Link
-              to={"/login"}
-              className="bg-transparent border border-gray-500 p-1 text-sm md:text-md md:py-2 md:px-4 rounded-md"
-            >
-              Login
-            </Link>
+            <LoginDropdown 
+              className="bg-transparent border border-gray-500 p-1 text-sm md:text-md md:py-2 md:px-4 rounded-md hover:bg-gray-700 transition-colors duration-200"
+              buttonText="Login"
+              showIcon={false}
+            />
             <Link
               to={"/courses"}
               className="bg-orange-500 p-1 text-sm md:text-md md:py-2 md:px-4 rounded-md"
@@ -74,7 +74,7 @@ function Signup() {
         {/* Signup Form */}
         <div className="bg-gray-900 p-8 rounded-lg shadow-lg w-[500px] m-8 md:m-0 mt-20">
           <h2 className="text-2xl font-bold mb-4 text-center">
-            Welcome to <span className="text-orange-500">CourseHaven</span>
+            Welcome to <span className="text-orange-500">CourseHeaven</span>
           </h2>
           <p className="text-center text-gray-400 mb-6">
             Just Signup To Join Us!
@@ -108,7 +108,6 @@ function Signup() {
                 required
               />
             </div>
-
             <div className="mb-4">
               <label htmlFor="email" className=" text-gray-400 mb-2">
                 Email

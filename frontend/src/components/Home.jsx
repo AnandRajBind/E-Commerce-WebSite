@@ -12,6 +12,7 @@ import { toast } from 'react-hot-toast'; // Importing toast for displaying notif
 import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import LoginDropdown from './LoginDropdown';
 
 function Home() {
     const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
@@ -54,13 +55,12 @@ function Home() {
                 withCredentials: true,
             });
             toast.success(response.data.message);
+            localStorage.removeItem("user"); // Ensure localStorage is also cleared
             logout();
         } catch (error) {
             toast.error(error.response?.data?.errors || "Logout failed");
         }
     };
-
-
 
     useEffect(() => {
         const fetchCourses = async () => { // Function to fetch courses from the backend API
@@ -80,6 +80,7 @@ function Home() {
         };
         fetchCourses(); // Calling the function to fetch courses
     }, []);
+
 
     // Settings for the carousel using react-slick
     var settings = {
@@ -124,26 +125,33 @@ function Home() {
         <div className="bg-gradient-to-r from-black to-blue-950">
             <div className='h-screen text-white container mx-auto '>
                 {/* Header */}
-                <header className='flex item-center justify-between p-6'>
-                    <div className='flex  items-center space-x-2'>
+                <header className='flex items-center justify-between p-6'>
+                    <div className='flex items-center space-x-2'>
                         <img src={logo} alt="image not found " className='w-10 h-10 rounded-full' />
-                        <h1 className='text-orange-500 text-2xl font-bold'>CourseHaven</h1>
+                        <h1 className='text-orange-500 text-2xl font-bold'>CourseHeaven</h1>
                     </div>
-                    <div className=' space-x-4'>
+
+{/* setLoginStatus(isLoggedIn); */}
+
+                    <div className='flex items-center space-x-4'>
                         {isLoggedIn ? (<button onClick={handleLogout} className='bg-transparent text-white py-2 px-4 border  border-white rounded '>Logout</button>
                         ) : (
                             <>
-                                <Link to={'/login'} className='bg-transparent text-white py-2 px-4 border  border-white rounded '>Login</Link>
-                                <Link to={'/signup'} className='bg-transparent text-white py-2 px-4 border  border-white rounded '>Signup</Link>
+                                <LoginDropdown 
+                                    className="bg-transparent text-white py-2 px-4 border border-white rounded hover:bg-white hover:text-black transition-colors duration-200"
+                                    buttonText="Login"
+                                    showIcon={false}
+                                />
+                                <Link to={'/signup'} className='bg-transparent text-white py-2 px-4 border border-white rounded hover:bg-white hover:text-black transition-colors duration-200'>Signup</Link>
                             </>
                         )} 
- 
-
                     </div>
+
+
                 </header>
                 {/* Main section */}
                 <section className='text-center py-12'>
-                    <h1 className='text-4xl text-orange-500  font-bold '>CourseHaven</h1>
+                    <h1 className='text-4xl text-orange-500  font-bold '>CourseHeaven</h1>
                     <br />
                     <p className='text-gray-500'>Sharpen Your Skills with Course Crafted By experts.</p>
                     <div className='space-x-4 mt-6'>
@@ -177,7 +185,7 @@ function Home() {
                         <div className='flex flex-col items-center md:items-start'>
                             <div className='flex  items-center space-x-2'>
                                 <img src={logo} alt="image not found " className='w-10 h-10 rounded-full' />
-                                <h1 className='text-orange-500 text-2xl font-bold'>CourseHaven</h1>
+                                <h1 className='text-orange-500 text-2xl font-bold'>CourseHeaven</h1>
                             </div>
                             <div className='mt-3 ml-2 md:ml-8'>
                                 <p className='mb-2'>Follow us</p>

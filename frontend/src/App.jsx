@@ -13,6 +13,7 @@ import { UpdateCourse } from './admin/UpdateCourse';
 import { OurCourses } from './admin/OurCourses';
 import Dashboard from './admin/Dashboard';
 import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
 
   return (
 
+      <AuthProvider>
     <div>
       <Routes>
         <Route path='/' element={<Home />} />
@@ -45,6 +47,7 @@ function App() {
       <Toaster />
 
     </div>
+    </AuthProvider>
   )
 }
 export default App;

@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import axios from 'axios'
 import logo from '/logo.webp'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
+import { AuthContext } from '../context/AuthContext.jsx'
 
 const Login = () => {
 
+    const { login } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -31,12 +33,10 @@ const Login = () => {
                 },
             });
             console.log("Login Successfull", response.data);
-            toast.success(response.data.message);//backend response message
-            //    alert("Login Successfull ");
-            localStorage.setItem("user",JSON.stringify({token:response.data.token,
-                user: response.data.user, // Storing user data in local storage
-            }))
-            navigate("/")
+            // Use context login function instead of localStorage directly
+            login(response.data);
+            toast.success("Login successful!");
+            navigate('/');
         } catch (error) {
             if (error.response) {
                 //   alert(error.response.data.errors)  //console error:  Cannot read properties of null (reading 'password')
@@ -53,7 +53,7 @@ const Login = () => {
                     <div className="flex items-center space-x-2">
                         <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
                         <Link to={"/"} className="text-xl font-bold text-orange-500">
-                            CourseHaven
+                            CourseHeaven
                         </Link>
                     </div>
                     <div className="flex items-center space-x-4">
@@ -75,7 +75,7 @@ const Login = () => {
                 {/* Login Form */}
                 <div className="bg-gray-900 p-8 rounded-lg shadow-lg w-[500px] m-8 md:m-0 mt-20">
                     <h2 className="text-2xl font-bold mb-4 text-center">
-                        Welcome to <span className="text-orange-500">CourseHaven</span>
+                        Welcome to <span className="text-orange-500">CourseHeaven</span>
                     </h2>
                     <p className="text-center text-gray-400 mb-6">
                         Log in to access paid content
