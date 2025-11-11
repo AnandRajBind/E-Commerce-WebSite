@@ -25,7 +25,6 @@ const LoginDropdown = ({ className = "", buttonText = "Login", showIcon = true }
                 <span>{buttonText}</span>
                 {isOpen ? <IoChevronUp className="ml-1" /> : <IoChevronDown className="ml-1" />}
             </button>
-
             {/* Dropdown Menu */}
             {isOpen && (
                 <div className="absolute top-full right-0 mt-2 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-[60] md:right-0 sm:right-0">
