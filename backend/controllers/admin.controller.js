@@ -49,7 +49,8 @@ export const login = async (req, res) => {
             expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
             httpOnly: true, // Prevents client-side JavaScript from accessing the cookie or cannot be accessed by JavaScript directly
             secure: process.env.NODE_ENV === "production", // Ensures the cookie is only sent over HTTPS in production
-            sameSite: "Strict" // Prevents the cookie from being sent with cross-site requests or CSRF attacks
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // "None" for cross-site requests in production, "Lax" for development
+            path: '/', // Cookie available for all paths
         }
         // Set the token in the cookies
         res.cookie("jwt", token, cookieOptions);
@@ -64,7 +65,13 @@ export const logout = async (req, res) => {
         if (!req.cookies.jwt) {
             return res.status(401).json({ error: "kindly login first" })
         }
-        res.clearCookie("jwt");
+        const cookieOptions = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+            path: '/',
+        }
+        res.clearCookie("jwt", cookieOptions);
         res.status(200).json({ message: "logout successful" });
     } catch (error) {
         res.status(500).json({ message: "error in logout", error: error.message });
