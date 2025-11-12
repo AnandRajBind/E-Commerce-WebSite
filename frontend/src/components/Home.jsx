@@ -204,9 +204,9 @@ function Home() {
                         <div className='items-center flex flex-col'>
                             <h3 className='text-lg font-semibold mb-2'>connect</h3>
                             <ul className='text-gray-400 '>
-                                <li className='hover:text-white cursor-pointer duration-300'>youtube- learn coading</li>
-                                <li className='hover:text-white cursor-pointer duration-300'>Telegram- learn coading</li>
-                                <li className='hover:text-white cursor-pointer duration-300'> Github- learn coading</li>
+                                <li className='hover:text-white cursor-pointer duration-300'>YouTube - anand coading</li>
+                                <li className='hover:text-white cursor-pointer duration-300'>Telegram - anand coading</li>
+                                <li className='hover:text-white cursor-pointer duration-300'> Github - anand coading</li>
                             </ul>
                         </div>
                         <div className='items-center flex  flex-col'>
