@@ -1,9 +1,10 @@
 {
-  "name": "course-app",
+  "name": "courseheaven",
   "version": "1.0.0",
   "description": "full stack E-commerce course-selling-app ",
   "keywords": [
-    "course-app"
+    "course-app",
+    "courseheaven"
   ],
   "license": "ISC",
   "author": "Anand Raj Bind",
