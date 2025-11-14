@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -17,9 +17,17 @@ import { AuthProvider } from './context/AuthContext';
 
 function App() {
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const admin = JSON.parse(localStorage.getItem("admin"));
-  console.log("admin from localStorage:", admin);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  
+  const [admin, setAdmin] = useState(() => {
+    const storedAdmin = localStorage.getItem("admin");
+    return storedAdmin ? JSON.parse(storedAdmin) : null;
+  });
+  
+  console.log("admin from state:", admin);
 
   return (
 
@@ -37,8 +45,8 @@ function App() {
 
 
         <Route path='/admin/signup' element={<AdminSignup />} />
-        <Route path='/admin/login' element={<AdminLogin />} />
-        <Route path='/admin/dashboard' element={admin ? <Dashboard /> : <Navigate to={"/admin/login"} />} />
+        <Route path='/admin/login' element={<AdminLogin setAdmin={setAdmin} />} />
+        <Route path='/admin/dashboard' element={admin ? <Dashboard /> : <Navigate to="/admin/login" />} />
        
         <Route path='/admin/create-course' element={<CourseCreate />} />
         <Route path='/admin/update-course/:id' element={<UpdateCourse />} />

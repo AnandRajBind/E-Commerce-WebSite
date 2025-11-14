@@ -5,13 +5,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { BACKEND_URL } from '../utils/utils.js'; // Importing the backend URL from utils
 
-const AdminLogin = () => {
+const AdminLogin = ({ setAdmin }) => {
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-
-    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -30,12 +29,17 @@ const AdminLogin = () => {
                 },
             });
             console.log("Admin login Successfull", response.data);
-            toast.success(response.data.message);//backend response message
-             navigate("/admin/dashboard")
-            localStorage.setItem("admin", JSON.stringify({
+            const adminData = {
                 token: response.data.token,
-                user: response.data.user, // Storing user data in local storage
-            }))
+                admin: response.data.admin,
+            };
+            // Store admin data in localStorage
+            localStorage.setItem("admin", JSON.stringify(adminData));
+            // Update parent state to trigger re-render
+            setAdmin(adminData);
+            toast.success(response.data.message);
+            // Navigate to dashboard
+            navigate("/admin/dashboard");
         } catch (error) {
             if (error.response) {
                 //   alert(error.response.data.errors)  //console error:  Cannot read properties of null (reading 'password')
