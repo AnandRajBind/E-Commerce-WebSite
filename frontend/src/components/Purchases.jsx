@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { RiHome2Fill } from 'react-icons/ri';
 import { FaDiscourse, FaDownload } from 'react-icons/fa6';
 import { IoMdSettings } from 'react-icons/io';
@@ -105,10 +105,11 @@ function Purchases() {
                                     <IoLogOut className="mr-2" /> Logout
                                 </button>
                             ) : (
-                                <LoginDropdown 
+                                <LoginDropdown
                                     className="flex items-center w-full text-left hover:bg-gray-100 p-2 rounded"
                                     buttonText="Login"
                                     showIcon={true}
+                                    align="left"
                                 />
                             )}
                         </li>

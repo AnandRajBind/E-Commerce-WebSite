@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { IoLogIn } from 'react-icons/io5'
 import { IoChevronDown, IoChevronUp } from 'react-icons/io5'
 
-const LoginDropdown = ({ className = "", buttonText = "Login", showIcon = true }) => {
+const LoginDropdown = ({ className = "", buttonText = "Login", showIcon = true, align = "right" }) => {
     const [isOpen, setIsOpen] = useState(false)
 
     const toggleDropdown = () => {
@@ -17,7 +17,7 @@ const LoginDropdown = ({ className = "", buttonText = "Login", showIcon = true }
     return (
         <div className="relative z-50">
             {/* Dropdown Button */}
-            <button 
+            <button
                 onClick={toggleDropdown}
                 className={`flex items-center space-x-2 ${className}`}
             >
@@ -27,9 +27,9 @@ const LoginDropdown = ({ className = "", buttonText = "Login", showIcon = true }
             </button>
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute top-full right-0 mt-2 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-[60] md:right-0 sm:right-0">
+                <div className={`absolute top-full mt-2 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-[60] ${align === "left" ? "left-0" : "right-0 md:right-0 sm:right-0"}`}>
                     <div className="py-2">
-                        <Link 
+                        <Link
                             to="/login"
                             onClick={closeDropdown}
                             className="block px-4 py-3 text-gray-800 hover:bg-blue-50 transition-colors duration-200"
@@ -42,10 +42,10 @@ const LoginDropdown = ({ className = "", buttonText = "Login", showIcon = true }
                                 </div>
                             </div>
                         </Link>
-                        
+
                         <hr className="my-1 border-gray-200" />
-                        
-                        <Link 
+
+                        <Link
                             to="/admin/login"
                             onClick={closeDropdown}
                             className="block px-4 py-3 text-gray-800 hover:bg-orange-50 transition-colors duration-200"
@@ -64,8 +64,8 @@ const LoginDropdown = ({ className = "", buttonText = "Login", showIcon = true }
 
             {/* Click outside to close */}
             {isOpen && (
-                <div 
-                    className="fixed inset-0 z-[55]" 
+                <div
+                    className="fixed inset-0 z-[55]"
                     onClick={closeDropdown}
                 ></div>
             )}

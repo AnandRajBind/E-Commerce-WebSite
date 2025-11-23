@@ -18,9 +18,9 @@ import LoginDropdown from './LoginDropdown';
 function Courses() {
   const [courses, setCourses] = useState([]); // State to hold the courses fetched from the backend
   const [loading, setLoading] = useState(true); // State to manage loading state
-  
+
   const { isLoggedIn, logout } = useContext(AuthContext); // Using AuthContext instead of local state
-  
+
   console.log("courses", courses);
 
   const handleLogout = async () => {
@@ -101,10 +101,11 @@ function Courses() {
                   <IoLogOut className="mr-2" /> Logout
                 </Link>
               ) : (
-                <LoginDropdown 
+                <LoginDropdown
                   className="flex items-center w-full text-left hover:bg-gray-100 p-2 rounded"
                   buttonText="Login"
                   showIcon={true}
+                  align="left"
                 />
               )}
             </li>
