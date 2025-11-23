@@ -12,6 +12,7 @@ const AdminSignup = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -131,7 +132,7 @@ const AdminSignup = () => {
               </label>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -139,8 +140,11 @@ const AdminSignup = () => {
                   placeholder="********"
                   required
                 />
-                <span className="absolute right-3 top-3 text-gray-500 cursor-pointer">
-                  👁️
+                <span
+                  className="absolute right-3 top-3 text-gray-500 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? "🙈" : "👁️"}
                 </span>
               </div>
             </div>

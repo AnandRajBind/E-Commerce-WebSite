@@ -12,6 +12,7 @@ function Signup() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -57,7 +58,7 @@ function Signup() {
             </Link>
           </div>
           <div className="flex items-center space-x-4">
-            <LoginDropdown 
+            <LoginDropdown
               className="bg-transparent border border-gray-500 p-1 text-sm md:text-md md:py-2 md:px-4 rounded-md hover:bg-gray-700 transition-colors duration-200"
               buttonText="Login"
               showIcon={false}
@@ -128,7 +129,7 @@ function Signup() {
               </label>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -136,8 +137,11 @@ function Signup() {
                   placeholder="********"
                   required
                 />
-                <span className="absolute right-3 top-3 text-gray-500 cursor-pointer">
-                  👁️
+                <span
+                  className="absolute right-3 top-3 text-gray-500 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? "🙈" : "👁️"}
                 </span>
               </div>
             </div>
